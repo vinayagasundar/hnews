@@ -1,0 +1,4 @@
+[submodule "buildSrc"]
+	path = buildSrc
+	url = https://github.com/vinayagasundar/buildSrc.git
+	branch = master
