@@ -33,7 +33,11 @@ dependencies {
     implementation(AppConfig.Libs.Network.retrofit2)
     implementation(AppConfig.Libs.Network.okhttpLogger)
     implementation(AppConfig.Libs.Network.gsonConv)
+    implementation(AppConfig.Libs.Network.rxJavaAdapter)
     implementation(AppConfig.Libs.Image.picasso)
+
+    implementation(AppConfig.Libs.RxJava.rxJava)
+    implementation(AppConfig.Libs.RxJava.rxJavaAndroid)
 
     debugImplementation(AppConfig.Libs.Debug.dbDebug)
 
