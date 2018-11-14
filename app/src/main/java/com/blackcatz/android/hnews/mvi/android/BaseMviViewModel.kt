@@ -22,7 +22,7 @@ abstract class BaseMviViewModel<I : MviIntent, S : MviViewState, A : MviAction> 
      * while the UI disconnects and reconnects on config changes.
      */
     protected val intentsSubject: PublishSubject<I> = PublishSubject.create()
-    protected val statesObservable: Observable<S> = this.compose()
+    protected val statesObservable: Observable<S> by lazy { compose() }
 
     override fun states(): Observable<S> = statesObservable
 
