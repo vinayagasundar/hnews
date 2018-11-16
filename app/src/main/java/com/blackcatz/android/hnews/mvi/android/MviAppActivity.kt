@@ -14,7 +14,7 @@ import timber.log.Timber
 /**
  * @author vinayagasundar
  */
-abstract class MvpAppActivity<I : MviIntent, S : MviViewState, out VM : MviViewModel<I, S>>
+abstract class MviAppActivity<I : MviIntent, S : MviViewState, out VM : MviViewModel<I, S>>
     : AppCompatActivity(),
     MviView<I, S>, IRxBinder {
 

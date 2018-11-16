@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.blackcatz.android.hnews.R
 import com.blackcatz.android.hnews.adapter.bind
 import com.blackcatz.android.hnews.di.AppComponentProvider
-import com.blackcatz.android.hnews.mvi.android.MvpAppActivity
+import com.blackcatz.android.hnews.mvi.android.MviAppActivity
 import com.blackcatz.android.hnews.ui.topstories.di.DaggerTopStoriesComponent
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_topstories.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class TopStoriesActivity : MvpAppActivity<TopStoriesIntent, TopStoriesViewState, TopStoriesViewModel>() {
+class TopStoriesActivity : MviAppActivity<TopStoriesIntent, TopStoriesViewState, TopStoriesViewModel>() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
