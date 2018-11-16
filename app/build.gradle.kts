@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.config.AnalysisFlag.Flags.experimental
+
 android {
     defaultConfig {
         applicationId = "com.blackcatz.android.hnews"
@@ -9,6 +11,10 @@ android {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
+    }
+
+    androidExtensions {
+        isExperimental = true
     }
 }
 
