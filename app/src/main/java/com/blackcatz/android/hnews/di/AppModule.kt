@@ -1,8 +1,8 @@
 package com.blackcatz.android.hnews.di
 
 import com.blackcatz.android.hnews.network.HackerAPI
-import com.blackcatz.android.hnews.repo.StoriesRepo
-import com.blackcatz.android.hnews.repo.StoriesRepoImpl
+import com.blackcatz.android.hnews.repo.ItemRepo
+import com.blackcatz.android.hnews.repo.ItemRepoImpl
 import dagger.Module
 import dagger.Provides
 
@@ -10,5 +10,5 @@ import dagger.Provides
 class AppModule {
 
     @Provides
-    fun provideStoriesRepo(hackerAPI: HackerAPI): StoriesRepo = StoriesRepoImpl(hackerAPI)
+    fun provideStoriesRepo(hackerAPI: HackerAPI): ItemRepo = ItemRepoImpl(hackerAPI)
 }

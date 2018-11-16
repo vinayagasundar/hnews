@@ -6,12 +6,12 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-interface StoriesRepo {
+interface ItemRepo {
     fun getStories(): Observable<List<Item>>
 }
 
 
-class StoriesRepoImpl(private val hackerAPI: HackerAPI) : StoriesRepo {
+class ItemRepoImpl(private val hackerAPI: HackerAPI) : ItemRepo {
     override fun getStories(): Observable<List<Item>> {
         return hackerAPI.getTopStories()
             .subscribeOn(Schedulers.io())

@@ -1,16 +1,16 @@
 package com.blackcatz.android.hnews.ui.topstories
 
-import com.blackcatz.android.hnews.repo.StoriesRepo
+import com.blackcatz.android.hnews.repo.ItemRepo
 import com.blackcatz.android.hnews.ui.topstories.TopStoriesAction.LoadStoriesAction
 import com.blackcatz.android.hnews.ui.topstories.TopStoriesResult.LoadStoriesResult
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
-class TopStoriesActionProcessorHolder(private val storiesRepo: StoriesRepo) {
+class TopStoriesActionProcessorHolder(private val itemRepo: ItemRepo) {
 
     private val loadTaskProcessor = ObservableTransformer<LoadStoriesAction, LoadStoriesResult> { actions ->
         actions.flatMap {
-            storiesRepo.getStories()
+            itemRepo.getStories()
                 .map { stories -> LoadStoriesResult.Success(stories) }
                 .cast(LoadStoriesResult::class.java)
                 .onErrorReturn { throwable -> LoadStoriesResult.Error(throwable) }

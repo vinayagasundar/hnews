@@ -1,7 +1,7 @@
 package com.blackcatz.android.hnews.ui.topstories.di
 
 import androidx.lifecycle.ViewModelProvider
-import com.blackcatz.android.hnews.repo.StoriesRepo
+import com.blackcatz.android.hnews.repo.ItemRepo
 import com.blackcatz.android.hnews.ui.topstories.TopStoriesActionProcessorHolder
 import com.blackcatz.android.hnews.ui.topstories.TopStoriesActivity
 import com.blackcatz.android.hnews.ui.topstories.TopStoriesViewModel
@@ -11,7 +11,7 @@ import dagger.Provides
 
 
 interface TopStoriesDependencies {
-    fun provideStoriesRepo(): StoriesRepo
+    fun provideStoriesRepo(): ItemRepo
 }
 
 
@@ -32,7 +32,7 @@ interface TopStoriesComponent {
 class TopStoriesModule {
 
     @Provides
-    fun provideTopStoriesActionProcessor(storiesRepo: StoriesRepo) = TopStoriesActionProcessorHolder(storiesRepo)
+    fun provideTopStoriesActionProcessor(itemRepo: ItemRepo) = TopStoriesActionProcessorHolder(itemRepo)
 
     @Provides
     fun provideTopStoriesViewModelFactory(topStoriesActionProcessorHolder: TopStoriesActionProcessorHolder): ViewModelProvider.Factory =
