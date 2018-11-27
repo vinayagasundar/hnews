@@ -1,16 +1,7 @@
 package com.blackcatz.android.hnews.ui.landing.domain
 
 import com.blackcatz.android.hnews.R
-
-
-enum class Story(private val type: String) {
-    TOP("topstories"),
-    NEW("newstories"),
-    BEST("beststories"),
-    ASK("askstories"),
-    SHOW("showstories"),
-    JOB("jobstories")
-}
+import com.blackcatz.android.hnews.model.Story
 
 
 val TOP_STORIES = BottomNavItem("Top", R.drawable.ic_top, Story.TOP)
