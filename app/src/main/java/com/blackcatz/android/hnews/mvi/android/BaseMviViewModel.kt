@@ -22,7 +22,7 @@ abstract class BaseMviViewModel<I : MviIntent, S : MviViewState, A : MviAction> 
      * while the UI disconnects and reconnects on config changes.
      */
     protected val intentsSubject: PublishSubject<I> = PublishSubject.create()
-    protected val statesObservable: Observable<S> by lazy { compose() }
+    private val statesObservable: Observable<S> by lazy { compose() }
 
     override fun states(): Observable<S> = statesObservable
 
@@ -42,5 +42,10 @@ abstract class BaseMviViewModel<I : MviIntent, S : MviViewState, A : MviAction> 
 
     final override fun rxBind(data: () -> Disposable) {
         compositeDisposable.add(data.invoke())
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }

@@ -9,6 +9,10 @@ import androidx.lifecycle.ViewModelProviders
 import com.blackcatz.android.hnews.R
 import com.blackcatz.android.hnews.di.AppComponentProvider
 import com.blackcatz.android.hnews.ui.landing.di.DaggerLandingComponent
+import com.blackcatz.android.hnews.ui.landing.domain.ASK_STORIES
+import com.blackcatz.android.hnews.ui.landing.domain.JOB_STORIES
+import com.blackcatz.android.hnews.ui.landing.domain.SHOW_STORIES
+import com.blackcatz.android.hnews.ui.landing.domain.TOP_STORIES
 import kotlinx.android.synthetic.main.activity_landing.*
 import javax.inject.Inject
 
@@ -38,6 +42,21 @@ class LandingActivity : AppCompatActivity() {
         list.forEach {
             item_bottom_nav.menu.add(Menu.NONE, 1, Menu.NONE, it.title)
                 .setIcon(it.icon)
+        }
+
+        val navAdapter = NavAdapter(supportFragmentManager)
+        stories_holder.adapter = navAdapter
+        stories_holder.visibility = View.VISIBLE
+
+        item_bottom_nav.setOnNavigationItemSelectedListener {
+            stories_holder.currentItem = when (it.title) {
+                TOP_STORIES.title -> 0
+                ASK_STORIES.title -> 1
+                SHOW_STORIES.title -> 2
+                JOB_STORIES.title -> 3
+                else -> 0
+            }
+            true
         }
 
         item_bottom_nav.visibility = View.VISIBLE

@@ -45,11 +45,6 @@ dependencies {
     implementation(AppConfig.Libs.RxJava.rxJava)
     implementation(AppConfig.Libs.RxJava.rxJavaAndroid)
 
-//    implementation(AppConfig.Libs.RxJava.rxBinding)
-    implementation(AppConfig.Libs.RxJava.rxBindingCore)
-    implementation(AppConfig.Libs.RxJava.rxBindingAppCompact)
-    implementation(AppConfig.Libs.RxJava.rxBindingViewPager)
-    implementation(AppConfig.Libs.RxJava.rxBindingRecyclerView)
 
     debugImplementation(AppConfig.Libs.Debug.dbDebug)
 

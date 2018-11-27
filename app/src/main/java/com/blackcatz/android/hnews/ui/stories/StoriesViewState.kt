@@ -1,14 +1,14 @@
-package com.blackcatz.android.hnews.ui.topstories
+package com.blackcatz.android.hnews.ui.stories
 
 import com.blackcatz.android.hnews.model.Item
 import com.blackcatz.android.hnews.mvi.MviViewState
 
-data class TopStoriesViewState(
+data class StoriesViewState(
     val isLoading: Boolean,
     val itemList: List<Item>,
     val error: Throwable?
 ) : MviViewState {
     companion object {
-        fun idle() = TopStoriesViewState(false, emptyList(), null)
+        fun idle() = StoriesViewState(false, emptyList(), null)
     }
 }
