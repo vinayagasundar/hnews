@@ -10,7 +10,7 @@ class StoriesActionProcessorHolder(private val itemRepo: ItemRepo) {
 
     private val loadTaskProcessor = ObservableTransformer<LoadStoriesAction, LoadStoriesResult> { actions ->
         actions.flatMap {
-            itemRepo.getStories()
+            itemRepo.getStories(it.story)
                 .map { stories -> LoadStoriesResult.Success(stories) }
                 .cast(LoadStoriesResult::class.java)
                 .onErrorReturn { throwable -> LoadStoriesResult.Error(throwable) }

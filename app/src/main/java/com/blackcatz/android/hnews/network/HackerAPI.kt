@@ -14,6 +14,14 @@ interface HackerAPI {
     @GET("topstories.json")
     fun getTopStories(): Single<List<Long>>
 
+    @GET("askstories.json")
+    fun getAskStories(): Single<List<Long>>
+
+    @GET("showstories.json")
+    fun getShowStories(): Single<List<Long>>
+
+    @GET("jobstories.json")
+    fun getJobStories(): Single<List<Long>>
 
     @GET("item/{itemId}.json")
     fun getItem(@Path("itemId") itemId: String): Single<Item>

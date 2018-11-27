@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.blackcatz.android.hnews.R
 import com.blackcatz.android.hnews.adapter.bind
 import com.blackcatz.android.hnews.di.AppComponentProvider
+import com.blackcatz.android.hnews.model.Story
 import com.blackcatz.android.hnews.mvi.android.MviAppFragment
 import com.blackcatz.android.hnews.ui.stories.di.DaggerStoriesComponent
 import io.reactivex.Observable
@@ -25,6 +26,24 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val refreshIntentPublisher = PublishSubject.create<StoriesIntent.RefreshIntent>()
+
+    private val story: Story by lazy {
+        val storyType: String? = arguments?.getString(KEY_STORY)
+        storyType?.let { Story.fromType(it) } ?: Story.TOP
+    }
+
+
+    companion object {
+        private const val KEY_STORY = "story"
+
+        fun create(story: Story): StoriesFragment {
+            val storyFragment = StoriesFragment()
+            storyFragment.arguments = Bundle().apply {
+                putString(KEY_STORY, story.toString())
+            }
+            return storyFragment
+        }
+    }
 
     override fun createViewModel(): StoriesViewModel {
         return ViewModelProviders.of(this, viewModelFactory)[StoriesViewModel::class.java]
@@ -86,10 +105,10 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
     }
 
     private fun initialIntents(): Observable<StoriesIntent.InitialIntent> =
-        Observable.just(StoriesIntent.InitialIntent)
+        Observable.just(StoriesIntent.InitialIntent(story))
 
     private fun refreshIntents(): Observable<StoriesIntent.RefreshIntent> =
-        Observable.just(StoriesIntent.RefreshIntent(false))
+        Observable.just(StoriesIntent.RefreshIntent(false, story))
             .map { it }
             .mergeWith(refreshIntentPublisher)
 }

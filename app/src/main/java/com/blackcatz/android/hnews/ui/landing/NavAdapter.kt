@@ -14,7 +14,7 @@ class NavAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(f
     private val list = ALL_STORIES
 
     override fun getItem(position: Int): Fragment {
-        return StoriesFragment()
+        return StoriesFragment.create(list[position].type)
     }
 
     override fun getCount(): Int {
