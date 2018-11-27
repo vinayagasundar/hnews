@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.topstories.TopStoriesActivity"/>
+        <activity android:name=".ui.landing.LandingActivity"/>
     </application>
 
 </manifest>
