@@ -1,5 +1,7 @@
 package com.blackcatz.android.hnews.di
 
+import com.blackcatz.android.hnews.mvi.rx.SchedulerProvider
+import com.blackcatz.android.hnews.mvi.rx.SchedulerProviderImpl
 import com.blackcatz.android.hnews.network.HackerAPI
 import com.blackcatz.android.hnews.repo.ItemRepo
 import com.blackcatz.android.hnews.repo.ItemRepoImpl
@@ -10,5 +12,9 @@ import dagger.Provides
 class AppModule {
 
     @Provides
-    fun provideStoriesRepo(hackerAPI: HackerAPI): ItemRepo = ItemRepoImpl(hackerAPI)
+    fun provideStoriesRepo(hackerAPI: HackerAPI, schedulerProvider: SchedulerProvider)
+            : ItemRepo = ItemRepoImpl(hackerAPI, schedulerProvider)
+
+    @Provides
+    fun provideSchedulerProvider(): SchedulerProvider = SchedulerProviderImpl()
 }

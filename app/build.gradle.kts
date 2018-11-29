@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.cli.jvm.main
 import org.jetbrains.kotlin.config.AnalysisFlag.Flags.experimental
 
 android {
@@ -15,6 +16,12 @@ android {
 
     androidExtensions {
         isExperimental = true
+    }
+
+    sourceSets {
+        getByName("test"){
+            java.srcDirs( "src/commonTest/java")
+        }
     }
 }
 

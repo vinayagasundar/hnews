@@ -2,6 +2,7 @@ package com.blackcatz.android.hnews.repo
 
 import com.blackcatz.android.hnews.model.Item
 import com.blackcatz.android.hnews.model.Story
+import com.blackcatz.android.hnews.mvi.rx.SchedulerProvider
 import com.blackcatz.android.hnews.network.HackerAPI
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -12,7 +13,7 @@ interface ItemRepo {
 }
 
 
-class ItemRepoImpl(private val hackerAPI: HackerAPI) : ItemRepo {
+class ItemRepoImpl(private val hackerAPI: HackerAPI, private val schedulerProvider: SchedulerProvider) : ItemRepo {
     override fun getStories(story: Story): Observable<List<Item>> {
         return Observable.just(story)
             .flatMap {
@@ -24,8 +25,8 @@ class ItemRepoImpl(private val hackerAPI: HackerAPI) : ItemRepo {
                     else -> hackerAPI.getTopStories().toObservable()
                 }
             }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.main())
             .flatMapIterable { it }
             .take(20)
             .flatMap(this::getItem)
@@ -36,8 +37,8 @@ class ItemRepoImpl(private val hackerAPI: HackerAPI) : ItemRepo {
 
     private fun getItem(itemId: Long): Observable<Item> {
         return hackerAPI.getItem("$itemId")
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.main())
             .toObservable()
     }
 }
