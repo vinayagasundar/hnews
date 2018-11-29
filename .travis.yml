@@ -31,7 +31,7 @@ android:
   - google-gdk-license-.+
 
 before_install:
-- yes | sdkmanager "platforms;android-$ANDROID_BUILD_TOOLS"
+- "yes | sdkmanager platforms;android-$ANDROID_BUILD_TOOLS"
 - "./gradlew dependencies || true"
 
 before_script:
