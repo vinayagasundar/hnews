@@ -5,17 +5,22 @@ import com.blackcatz.android.hnews.ui.stories.StoriesAction.LoadStoriesAction
 import com.blackcatz.android.hnews.ui.stories.StoriesResult.LoadStoriesResult
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import io.reactivex.functions.BiPredicate
 
 class StoriesActionProcessorHolder(private val itemRepo: ItemRepo) {
 
     private val loadTaskProcessor = ObservableTransformer<LoadStoriesAction, LoadStoriesResult> { actions ->
-        actions.flatMap {
-            itemRepo.getStories(it.story)
-                .map { stories -> LoadStoriesResult.Success(stories) }
-                .cast(LoadStoriesResult::class.java)
-                .onErrorReturn { throwable -> LoadStoriesResult.Error(throwable) }
-                .startWith(LoadStoriesResult.Loading)
-        }
+        actions
+            .distinctUntilChanged(BiPredicate { old, new ->
+                return@BiPredicate !(!old.forceUpdate || new.forceUpdate)
+            })
+            .flatMap {
+                itemRepo.getStories(it.story)
+                    .map { stories -> LoadStoriesResult.Success(stories) }
+                    .cast(LoadStoriesResult::class.java)
+                    .onErrorReturn { throwable -> LoadStoriesResult.Error(throwable) }
+                    .startWith(LoadStoriesResult.Loading)
+            }
     }
 
 

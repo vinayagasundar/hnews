@@ -40,7 +40,7 @@ class StoriesViewModel(private val storiesActionProcessorHolder: StoriesActionPr
 
     override fun actionFromIntents(intents: StoriesIntent): StoriesAction {
         return when (intents) {
-            is StoriesIntent.InitialIntent -> StoriesAction.LoadStoriesAction(intents.story, true)
+            is StoriesIntent.InitialIntent -> StoriesAction.LoadStoriesAction(intents.story, false)
             is StoriesIntent.RefreshIntent -> StoriesAction.LoadStoriesAction(intents.story, intents.forcedUpdate)
         }
     }

@@ -53,6 +53,14 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
         return inflater.inflate(R.layout.fragment_stories, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        refresh_layout.setOnRefreshListener {
+            refreshIntentPublisher.onNext(StoriesIntent.RefreshIntent(true, story))
+        }
+    }
+
     override fun injectDependencies() {
         DaggerStoriesComponent.builder()
             .plusDependencies((context?.applicationContext as AppComponentProvider).provideAppComponent())
@@ -68,10 +76,10 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
     override fun render(state: StoriesViewState) {
         Timber.i("Here $state")
         if (state.isLoading) {
-            loading_bar.visibility = View.VISIBLE
+            refresh_layout.isRefreshing = true
             stories_recycler_view.visibility = View.GONE
         } else {
-            loading_bar.visibility = View.GONE
+            refresh_layout.isRefreshing = false
             stories_recycler_view.visibility = View.VISIBLE
         }
 
@@ -107,8 +115,5 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
     private fun initialIntents(): Observable<StoriesIntent.InitialIntent> =
         Observable.just(StoriesIntent.InitialIntent(story))
 
-    private fun refreshIntents(): Observable<StoriesIntent.RefreshIntent> =
-        Observable.just(StoriesIntent.RefreshIntent(false, story))
-            .map { it }
-            .mergeWith(refreshIntentPublisher)
+    private fun refreshIntents(): Observable<StoriesIntent.RefreshIntent> = refreshIntentPublisher
 }

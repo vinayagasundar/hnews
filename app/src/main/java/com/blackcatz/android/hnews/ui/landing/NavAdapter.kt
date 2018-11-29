@@ -2,14 +2,14 @@ package com.blackcatz.android.hnews.ui.landing
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.fragment.app.FragmentPagerAdapter
 import com.blackcatz.android.hnews.ui.landing.domain.ALL_STORIES
 import com.blackcatz.android.hnews.ui.stories.StoriesFragment
 
 /**
  * @author vinayagasundar
  */
-class NavAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+class NavAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
 
     private val list = ALL_STORIES
 
