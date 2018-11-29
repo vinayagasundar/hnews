@@ -1,4 +1,4 @@
-package com.blackcatz.android.hnews.mvpi.rx
+package com.blackcatz.android.hnews.mvp.rx
 
 import com.blackcatz.android.hnews.mvi.rx.SchedulerProvider
 import io.reactivex.Scheduler

@@ -2,7 +2,7 @@ package com.blackcatz.android.hnews.repo
 
 import com.blackcatz.android.hnews.model.Item
 import com.blackcatz.android.hnews.model.Story
-import com.blackcatz.android.hnews.mvpi.rx.MockSchedulerProvider
+import com.blackcatz.android.hnews.mvp.rx.MockSchedulerProvider
 import com.blackcatz.android.hnews.network.HackerAPI
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
