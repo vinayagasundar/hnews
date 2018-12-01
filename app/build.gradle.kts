@@ -37,6 +37,7 @@ dependencies {
 
     implementation(AppConfig.Libs.Support.lifeCycle)
     implementation(AppConfig.Libs.Support.room)
+    implementation(AppConfig.Libs.Support.customTabs)
 
     implementation(AppConfig.Libs.BlackCatz.daggerbase)
 
