@@ -2,13 +2,13 @@ language: android
 jdk: oraclejdk8
 
 before-cache:
-- rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
 cache:
   directories:
-  - "$HOME/.gradle/caches/"
-  - "$HOME/.gradle/wrapper/"
+    - "$HOME/.gradle/caches/"
+    - "$HOME/.gradle/wrapper/"
 
 env:
   global:
@@ -18,24 +18,26 @@ env:
 
 android:
   components:
-  - tools
-  - platform-tools
-  - android-$ANDROID_API
-  - extra-google-m2repository
-  - extra-android-m2repository
+    - tools
+    - platform-tools
+    - build-tools-$ANDROID_BUILD_TOOLS
+    - android-$ANDROID_API
+    - extra-google-m2repository
+    - extra-android-m2repository
   licenses:
-  - android-sdk-preview-license-.+
-  - android-sdk-license-.+
-  - google-gdk-license-.+
+    - android-sdk-preview-license-.+
+    - android-sdk-license-.+
+    - google-gdk-license-.+
 
 before_install:
-- "./gradlew dependencies || true"
+    - yes | sdkmanager "platforms;android-28"
+    - "./gradlew dependencies || true"
 
 before_script:
-- echo "Build Release"
+  - echo "Build Release"
 
 script:
-- "./script/buildViaTravis.sh"
+  - "./script/buildViaTravis.sh"
 
 after_script:
-- echo "Completed"
+  - echo "Completed"
