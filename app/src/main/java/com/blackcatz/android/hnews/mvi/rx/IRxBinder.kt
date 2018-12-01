@@ -4,4 +4,6 @@ import io.reactivex.disposables.Disposable
 
 interface IRxBinder {
     fun rxBind(data: () -> Disposable)
+
+    fun <T> async(): RxTransformer<T>
 }

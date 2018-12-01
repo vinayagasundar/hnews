@@ -13,7 +13,10 @@ interface ItemRepo {
 }
 
 
-class ItemRepoImpl(private val hackerAPI: HackerAPI, private val schedulerProvider: SchedulerProvider) : ItemRepo {
+class ItemRepoImpl(
+    private val hackerAPI: HackerAPI,
+    private val schedulerProvider: SchedulerProvider
+) : ItemRepo {
     override fun getStories(story: Story): Observable<List<Item>> {
         return Observable.just(story)
             .flatMap {

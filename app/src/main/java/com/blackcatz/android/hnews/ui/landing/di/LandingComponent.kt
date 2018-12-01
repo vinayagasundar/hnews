@@ -1,7 +1,6 @@
 package com.blackcatz.android.hnews.ui.landing.di
 
 import androidx.lifecycle.ViewModelProvider
-import com.blackcatz.android.hnews.repo.ItemRepo
 import com.blackcatz.android.hnews.ui.landing.LandingActivity
 import com.blackcatz.android.hnews.ui.landing.LandingViewModel
 import dagger.Component
@@ -10,7 +9,6 @@ import dagger.Provides
 
 
 interface LandingDependencies {
-    fun provideItemRepo(): ItemRepo
 }
 
 

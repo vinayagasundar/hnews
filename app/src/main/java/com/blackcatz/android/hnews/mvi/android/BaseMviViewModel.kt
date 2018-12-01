@@ -6,6 +6,8 @@ import com.blackcatz.android.hnews.mvi.MviIntent
 import com.blackcatz.android.hnews.mvi.MviViewModel
 import com.blackcatz.android.hnews.mvi.MviViewState
 import com.blackcatz.android.hnews.mvi.rx.IRxBinder
+import com.blackcatz.android.hnews.mvi.rx.RxTransformer
+import com.blackcatz.android.hnews.mvi.rx.RxTransformerImpl
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -43,6 +45,8 @@ abstract class BaseMviViewModel<I : MviIntent, S : MviViewState, A : MviAction> 
     final override fun rxBind(data: () -> Disposable) {
         compositeDisposable.add(data.invoke())
     }
+
+    final override fun <T> async(): RxTransformer<T> = RxTransformerImpl.create()
 
     override fun onCleared() {
         super.onCleared()
