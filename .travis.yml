@@ -1,5 +1,4 @@
 language: android
-sudo: required
 jdk: oraclejdk8
 
 before-cache:
@@ -31,7 +30,6 @@ android:
   - google-gdk-license-.+
 
 before_install:
-- "yes | sdkmanager platforms;android-$ANDROID_BUILD_TOOLS"
 - "./gradlew dependencies || true"
 
 before_script:
