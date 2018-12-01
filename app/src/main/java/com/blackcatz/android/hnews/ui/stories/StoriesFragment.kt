@@ -1,11 +1,14 @@
 package com.blackcatz.android.hnews.ui.stories
 
+import android.net.Uri
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.blackcatz.android.hnews.R
@@ -98,6 +101,16 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
 
                 item.kids?.let {
                     commentCount?.text = "${it.size} comments"
+                }
+
+                this.setOnClickListener {
+                    val url = item.url
+                    url?.let { url ->
+                        val builder = CustomTabsIntent.Builder()
+                        builder.setToolbarColor(ContextCompat.getColor(context, R.color.primaryColor))
+                        val intent = builder.build()
+                        intent.launchUrl(this.context, Uri.parse(url))
+                    }
                 }
 
                 createdOn?.text =
