@@ -35,6 +35,24 @@ class ItemRepoImplTest {
         descendants = 1
     )
 
+    private val anotherItem = Item(
+        id = 100,
+        deleted = false,
+        type = "type",
+        by = "author",
+        time = 0,
+        text = "Hello World",
+        dead = false,
+        parent = 1,
+        poll = 100,
+        kids = null,
+        url = null,
+        score = 100,
+        title = "Better World",
+        parts = emptyList(),
+        descendants = 1
+    )
+
     @Test
     fun `should return Items for given Story`() {
         whenever(hackerAPI.getAskStories()).thenReturn(Single.just(listOfIds))
@@ -44,6 +62,27 @@ class ItemRepoImplTest {
             .test()
             .assertValue {
                 it[0] == item
+            }
+            .dispose()
+    }
+
+    @Test
+    fun `should return Items for given story, page and size`() {
+        whenever(hackerAPI.getAskStories()).thenReturn(Single.just(listOfIds))
+        whenever(hackerAPI.getItem(any())).thenReturn(Single.just(item))
+
+        itemRepo.getStories(0, 1, Story.ASK)
+            .test()
+            .assertValue {
+                it[0] == item
+            }
+            .dispose()
+
+
+        itemRepo.getStories(1, 1, Story.ASK)
+            .test()
+            .assertValue {
+                it[0] ==anotherItem
             }
             .dispose()
     }
