@@ -6,7 +6,8 @@ import com.blackcatz.android.hnews.mvi.MviViewState
 data class StoriesViewState(
     val isLoading: Boolean,
     val itemList: List<Item>,
-    val error: Throwable?
+    val error: Throwable?,
+    val nextPage: Int = 0
 ) : MviViewState {
     companion object {
         fun idle() = StoriesViewState(false, emptyList(), null)

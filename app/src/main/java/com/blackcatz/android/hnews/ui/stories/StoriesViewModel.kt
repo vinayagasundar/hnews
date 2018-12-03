@@ -42,6 +42,7 @@ class StoriesViewModel(private val storiesActionProcessorHolder: StoriesActionPr
         return when (intents) {
             is StoriesIntent.InitialIntent -> StoriesAction.LoadStoriesAction(intents.story, false)
             is StoriesIntent.RefreshIntent -> StoriesAction.LoadStoriesAction(intents.story, intents.forcedUpdate)
+            is StoriesIntent.LoadMoreIntent -> StoriesAction.LoadMoreStoriesAction(intents.storyRequest)
         }
     }
 
@@ -52,11 +53,27 @@ class StoriesViewModel(private val storiesActionProcessorHolder: StoriesActionPr
                     previousState.copy(isLoading = true)
                 }
                 is StoriesResult.LoadStoriesResult.Success -> {
-                    previousState.copy(isLoading = false, itemList = result.stories)
+                    previousState.copy(isLoading = false, itemList = result.stories, nextPage = 1)
                 }
 
                 is StoriesResult.LoadStoriesResult.Error -> {
                     previousState.copy(error = result.throwable)
+                }
+            }
+
+            is StoriesResult.LoadMoreStoriesResult -> when (result) {
+                is StoriesResult.LoadMoreStoriesResult.Success -> {
+                    val items = previousState.itemList + result.storyResponse.stories
+                    previousState.copy(
+                        itemList = items,
+                        nextPage = result.storyResponse.page + 1
+                    )
+                }
+                is StoriesResult.LoadMoreStoriesResult.Error -> {
+                    previousState.copy(error = result.throwable)
+                }
+                StoriesResult.LoadMoreStoriesResult.Loading -> {
+                    previousState
                 }
             }
         }
