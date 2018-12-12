@@ -1,6 +1,6 @@
 package com.blackcatz.android.hnews.repo
 
-import com.blackcatz.android.hnews.model.Item
+import com.blackcatz.android.hnews.data.MockItem
 import com.blackcatz.android.hnews.model.Story
 import com.blackcatz.android.hnews.mvp.rx.MockSchedulerProvider
 import com.blackcatz.android.hnews.network.HackerAPI
@@ -17,51 +17,16 @@ class ItemRepoImplTest {
     private val itemRepo: ItemRepo = ItemRepoImpl(hackerAPI, MockSchedulerProvider())
 
     private val listOfIds = listOf<Long>(100, 200)
-    private val item = Item(
-        id = 100,
-        deleted = false,
-        type = "type",
-        by = "author",
-        time = 0,
-        text = "Hello World",
-        dead = false,
-        parent = 1,
-        poll = 100,
-        kids = null,
-        url = null,
-        score = 100,
-        title = "Better World",
-        parts = emptyList(),
-        descendants = 1
-    )
-
-    private val anotherItem = Item(
-        id = 100,
-        deleted = false,
-        type = "type",
-        by = "author",
-        time = 0,
-        text = "Hello World",
-        dead = false,
-        parent = 1,
-        poll = 100,
-        kids = null,
-        url = null,
-        score = 100,
-        title = "Better World",
-        parts = emptyList(),
-        descendants = 1
-    )
 
     @Test
     fun `should return Items for given Story`() {
         whenever(hackerAPI.getAskStories()).thenReturn(Single.just(listOfIds))
-        whenever(hackerAPI.getItem(any())).thenReturn(Single.just(item))
+        whenever(hackerAPI.getItem(any())).thenReturn(Single.just(MockItem.itemOne))
 
         itemRepo.getStories(Story.ASK)
             .test()
             .assertValue {
-                it[0] == item
+                it[0] == MockItem.itemOne
             }
             .dispose()
     }
@@ -69,20 +34,21 @@ class ItemRepoImplTest {
     @Test
     fun `should return Items for given story, page and size`() {
         whenever(hackerAPI.getAskStories()).thenReturn(Single.just(listOfIds))
-        whenever(hackerAPI.getItem(any())).thenReturn(Single.just(item))
+        whenever(hackerAPI.getItem(any())).thenReturn(Single.just(MockItem.itemOne))
 
         itemRepo.getStories(0, 1, Story.ASK)
             .test()
             .assertValue {
-                it[0] == item
+                it[0] == MockItem.itemOne
             }
             .dispose()
 
+        whenever(hackerAPI.getItem(any())).thenReturn(Single.just(MockItem.itemTwo))
 
         itemRepo.getStories(1, 1, Story.ASK)
             .test()
             .assertValue {
-                it[0] ==anotherItem
+                it[0] == MockItem.itemTwo
             }
             .dispose()
     }
