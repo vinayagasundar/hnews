@@ -15,7 +15,7 @@ enum class Story(private val type: String) {
 
     companion object {
         fun fromType(type: String): Story {
-            return Story.values().first {
+            return values().first {
                 it.type == type
             }
         }

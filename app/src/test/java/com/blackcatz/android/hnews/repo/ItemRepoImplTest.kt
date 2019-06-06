@@ -2,7 +2,6 @@ package com.blackcatz.android.hnews.repo
 
 import com.blackcatz.android.hnews.data.MockItem
 import com.blackcatz.android.hnews.model.Story
-import com.blackcatz.android.hnews.mvp.rx.MockSchedulerProvider
 import com.blackcatz.android.hnews.network.HackerAPI
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
@@ -14,7 +13,7 @@ class ItemRepoImplTest {
 
     private val hackerAPI: HackerAPI = mock()
 
-    private val itemRepo: ItemRepo = ItemRepoImpl(hackerAPI, MockSchedulerProvider())
+    private val itemRepo: ItemRepo = ItemRepoImpl(hackerAPI)
 
     private val listOfIds = listOf<Long>(100, 200)
 

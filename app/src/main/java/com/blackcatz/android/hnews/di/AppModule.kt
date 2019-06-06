@@ -12,8 +12,7 @@ import dagger.Provides
 class AppModule {
 
     @Provides
-    fun provideStoriesRepo(hackerAPI: HackerAPI, schedulerProvider: SchedulerProvider)
-            : ItemRepo = ItemRepoImpl(hackerAPI, schedulerProvider)
+    fun provideStoriesRepo(hackerAPI: HackerAPI): ItemRepo = ItemRepoImpl(hackerAPI)
 
     @Provides
     fun provideSchedulerProvider(): SchedulerProvider = SchedulerProviderImpl()

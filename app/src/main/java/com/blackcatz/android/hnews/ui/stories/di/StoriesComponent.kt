@@ -1,10 +1,12 @@
 package com.blackcatz.android.hnews.ui.stories.di
 
 import androidx.lifecycle.ViewModelProvider
+import com.blackcatz.android.hnews.mvi.rx.RxLifeCycle
 import com.blackcatz.android.hnews.repo.ItemRepo
 import com.blackcatz.android.hnews.ui.stories.StoriesActionProcessorHolder
 import com.blackcatz.android.hnews.ui.stories.StoriesFragment
 import com.blackcatz.android.hnews.ui.stories.StoriesViewModel
+import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -22,6 +24,9 @@ interface StoriesComponent {
     interface Builder {
         fun plusDependencies(storiesComponent: StoriesDependenciesComponent): Builder
 
+        @BindsInstance
+        fun rxLifeCycle(rxBind: RxLifeCycle): Builder
+
         fun build(): StoriesComponent
     }
 
@@ -32,9 +37,13 @@ interface StoriesComponent {
 class StoriesModule {
 
     @Provides
-    fun provideTopStoriesActionProcessor(itemRepo: ItemRepo) = StoriesActionProcessorHolder(itemRepo)
+    fun provideTopStoriesActionProcessor(itemRepo: ItemRepo, rxLifeCycle: RxLifeCycle) =
+        StoriesActionProcessorHolder(itemRepo, rxLifeCycle)
 
     @Provides
-    fun provideTopStoriesViewModelFactory(storiesActionProcessorHolder: StoriesActionProcessorHolder): ViewModelProvider.Factory =
-        StoriesViewModel.Factory(storiesActionProcessorHolder)
+    fun provideTopStoriesViewModelFactory(
+        storiesActionProcessorHolder: StoriesActionProcessorHolder,
+        rxLifeCycle: RxLifeCycle
+    ): ViewModelProvider.Factory =
+        StoriesViewModel.Factory(storiesActionProcessorHolder, rxLifeCycle)
 }

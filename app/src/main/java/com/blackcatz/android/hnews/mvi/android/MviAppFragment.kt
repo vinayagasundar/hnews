@@ -6,15 +6,15 @@ import com.blackcatz.android.hnews.mvi.MviIntent
 import com.blackcatz.android.hnews.mvi.MviView
 import com.blackcatz.android.hnews.mvi.MviViewModel
 import com.blackcatz.android.hnews.mvi.MviViewState
-import com.blackcatz.android.hnews.mvi.rx.IRxBinder
+import com.blackcatz.android.hnews.mvi.rx.RxLifeCycle
 import com.blackcatz.android.hnews.mvi.rx.RxTransformer
-import com.blackcatz.android.hnews.mvi.rx.RxTransformerImpl
+import com.blackcatz.android.hnews.mvi.rx.AsyncTransformer
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
 abstract class MviAppFragment<I : MviIntent, S : MviViewState, out VM : MviViewModel<I, S>>
-    : Fragment(), MviView<I, S>, IRxBinder {
+    : Fragment(), MviView<I, S>, RxLifeCycle {
 
 
     private val compositeDisposable = CompositeDisposable()
@@ -43,7 +43,7 @@ abstract class MviAppFragment<I : MviIntent, S : MviViewState, out VM : MviViewM
     }
 
     private fun bind() {
-        rxBind {
+        bind {
             viewModel.states().subscribe(this::render, Timber::e)
         }
         viewModel.processIntents(intents())
@@ -53,9 +53,9 @@ abstract class MviAppFragment<I : MviIntent, S : MviViewState, out VM : MviViewM
         compositeDisposable.clear()
     }
 
-    final override fun rxBind(data: () -> Disposable) {
+    final override fun bind(data: () -> Disposable) {
         compositeDisposable.add(data())
     }
 
-    final override fun <T> async(): RxTransformer<T> = RxTransformerImpl.create()
+    final override fun <T> async(): RxTransformer<T> = AsyncTransformer.create()
 }

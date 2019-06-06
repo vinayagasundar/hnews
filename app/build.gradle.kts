@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.cli.jvm.main
-import org.jetbrains.kotlin.config.AnalysisFlag.Flags.experimental
 
 android {
     defaultConfig {
