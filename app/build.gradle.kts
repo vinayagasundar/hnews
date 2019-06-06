@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.cli.jvm.main
-
 android {
     defaultConfig {
         applicationId = "com.blackcatz.android.hnews"
@@ -18,9 +16,14 @@ android {
     }
 
     sourceSets {
-        getByName("test"){
-            java.srcDirs( "src/commonTest/java")
+        getByName("test") {
+            java.srcDirs("src/commonTest/java")
         }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
@@ -33,12 +36,8 @@ dependencies {
     implementation(AppConfig.Libs.Support.materialDesign)
     implementation(AppConfig.Libs.Support.recyclerView)
 
-
     implementation(AppConfig.Libs.Support.lifeCycle)
-    implementation(AppConfig.Libs.Support.room)
     implementation(AppConfig.Libs.Support.customTabs)
-
-    implementation(AppConfig.Libs.BlackCatz.daggerbase)
 
     implementation(AppConfig.Libs.Dagger.daggerAndroid)
     implementation(AppConfig.Libs.Dagger.daggerAndroidSupport)
@@ -47,18 +46,14 @@ dependencies {
     implementation(AppConfig.Libs.Network.okhttpLogger)
     implementation(AppConfig.Libs.Network.gsonConv)
     implementation(AppConfig.Libs.Network.rxJavaAdapter)
-    implementation(AppConfig.Libs.Image.picasso)
 
     implementation(AppConfig.Libs.RxJava.rxJava)
     implementation(AppConfig.Libs.RxJava.rxJavaAndroid)
 
-
-    debugImplementation(AppConfig.Libs.Debug.dbDebug)
-
+    implementation(AppConfig.Libs.Debug.timerLogger)
 
     kapt(AppConfig.Libs.Dagger.daggerCompiler)
     kapt(AppConfig.Libs.Dagger.daggerAndroidCompiler)
-    kapt(AppConfig.Libs.Support.roomCompiler)
 
     testImplementation(AppConfig.Libs.Test.junit)
     testImplementation(AppConfig.Libs.Support.roomTestHelper)
@@ -67,4 +62,6 @@ dependencies {
 
     androidTestImplementation(AppConfig.Libs.AndroidTest.testRunner)
     androidTestImplementation(AppConfig.Libs.AndroidTest.espressoCore)
+
+    debugImplementation(AppConfig.Libs.Debug.dbDebug)
 }

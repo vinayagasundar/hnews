@@ -1,5 +1,4 @@
 import com.android.build.gradle.BaseExtension
-import com.android.builder.model.Dependencies
 import org.jetbrains.kotlin.gradle.dsl.Coroutines
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
@@ -46,10 +45,6 @@ allprojects {
 
 fun Project.configureKotlin() {
     apply(plugin = "kotlin")
-
-    configure<KotlinProjectExtension> {
-        experimental.coroutines = Coroutines.ENABLE
-    }
 }
 
 
@@ -69,10 +64,6 @@ fun Project.configureAndroid() {
             versionName = "1.0"
         }
     }
-
-    configure<KotlinProjectExtension> {
-        experimental.coroutines = Coroutines.ENABLE
-    }
 }
 
 fun Project.configureAndroidLibs() {
@@ -88,9 +79,5 @@ fun Project.configureAndroidLibs() {
             minSdkVersion(AppConfig.SdkVersion.min)
             targetSdkVersion(AppConfig.SdkVersion.target)
         }
-    }
-
-    configure<KotlinProjectExtension> {
-        experimental.coroutines = Coroutines.ENABLE
     }
 }
