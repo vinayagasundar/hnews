@@ -3,6 +3,7 @@ package com.blackcatz.android.hnews.ui.stories
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.blackcatz.android.hnews.mvi.android.BaseMviViewModel
+import com.blackcatz.android.hnews.mvi.rx.RxLifeCycle
 import com.blackcatz.android.hnews.mvi.rx.notOfType
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
@@ -10,13 +11,17 @@ import io.reactivex.functions.BiFunction
 
 typealias StoriesBaseViewModel = BaseMviViewModel<StoriesIntent, StoriesViewState, StoriesAction>
 
-class StoriesViewModel(private val storiesActionProcessorHolder: StoriesActionProcessorHolder) :
-    StoriesBaseViewModel() {
+class StoriesViewModel(
+    private val storiesActionProcessorHolder: StoriesActionProcessorHolder,
+    private val rxLifeCycle: RxLifeCycle
+) : StoriesBaseViewModel() {
 
-
-    class Factory(private val storiesActionProcessorHolder: StoriesActionProcessorHolder) : ViewModelProvider.Factory {
+    class Factory(
+        private val storiesActionProcessorHolder: StoriesActionProcessorHolder,
+        private val rxLifeCycle: RxLifeCycle
+    ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return StoriesViewModel(storiesActionProcessorHolder) as T
+            return StoriesViewModel(storiesActionProcessorHolder, rxLifeCycle) as T
         }
     }
 
@@ -29,7 +34,9 @@ class StoriesViewModel(private val storiesActionProcessorHolder: StoriesActionPr
         }
 
     override fun compose(): Observable<StoriesViewState> {
-        return intentsSubject.compose(intentFilter)
+        return intentsSubject
+            .compose(rxLifeCycle.async())
+            .compose(intentFilter)
             .map(this::actionFromIntents)
             .compose(storiesActionProcessorHolder.actionProcessor)
             .scan(StoriesViewState.idle(), reducer)
@@ -57,7 +64,7 @@ class StoriesViewModel(private val storiesActionProcessorHolder: StoriesActionPr
                 }
 
                 is StoriesResult.LoadStoriesResult.Error -> {
-                    previousState.copy(error = result.throwable)
+                    previousState.copy(error = result.throwable, isLoading = false)
                 }
             }
 
@@ -66,14 +73,15 @@ class StoriesViewModel(private val storiesActionProcessorHolder: StoriesActionPr
                     val items = previousState.itemList + result.storyResponse.stories
                     previousState.copy(
                         itemList = items,
-                        nextPage = result.storyResponse.page + 1
+                        nextPage = result.storyResponse.page + 1,
+                        isLoading = false
                     )
                 }
                 is StoriesResult.LoadMoreStoriesResult.Error -> {
-                    previousState.copy(error = result.throwable)
+                    previousState.copy(error = result.throwable, isLoading = false)
                 }
                 StoriesResult.LoadMoreStoriesResult.Loading -> {
-                    previousState
+                    previousState.copy(isLoading = true)
                 }
             }
         }

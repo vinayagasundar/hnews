@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.blackcatz.android.hnews.R
 import com.blackcatz.android.hnews.adapter.FastListAdapter
 import com.blackcatz.android.hnews.adapter.bind
-import com.blackcatz.android.hnews.adapter.update
 import com.blackcatz.android.hnews.di.AppComponentProvider
 import com.blackcatz.android.hnews.model.Item
 import com.blackcatz.android.hnews.model.Story
@@ -85,6 +84,7 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
     override fun injectDependencies() {
         DaggerStoriesComponent.builder()
             .plusDependencies((context?.applicationContext as AppComponentProvider).provideAppComponent())
+            .rxLifeCycle(this)
             .build()
             .inject(this)
     }
@@ -96,7 +96,6 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
     )
 
     override fun render(state: StoriesViewState) {
-        Timber.i("Here $state")
         if (state.isLoading) {
             refresh_layout.isRefreshing = true
             stories_recycler_view.visibility = View.GONE
@@ -143,13 +142,13 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
         }
 
         createdOn?.text =
-                item.time?.let {
-                    DateUtils.getRelativeTimeSpanString(
-                        this@StoriesFragment.context,
-                        it * 1000,
-                        true
-                    )
-                }
+            item.time?.let {
+                DateUtils.getRelativeTimeSpanString(
+                    this@StoriesFragment.context,
+                    it * 1000,
+                    true
+                )
+            }
     }
 
     private fun initialIntents(): Observable<StoriesIntent.InitialIntent> =
