@@ -21,9 +21,9 @@ import com.blackcatz.android.hnews.mvi.android.MviAppFragment
 import com.blackcatz.android.hnews.ui.stories.di.DaggerStoriesComponent
 import com.blackcatz.android.hnews.ui.stories.domain.StoryRequest
 import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_stories.*
-import timber.log.Timber
 import javax.inject.Inject
 
 class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesViewModel>() {
@@ -31,9 +31,9 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val refreshIntentPublisher = PublishSubject.create<StoriesIntent.RefreshIntent>()
+    private val refreshIntentPublisher = BehaviorSubject.create<StoriesIntent.RefreshIntent>()
 
-    private val loadMoreIntentPublisher = PublishSubject.create<StoriesIntent.LoadMoreIntent>()
+    private val loadMoreIntentPublisher = PublishSubject.create<StoriesIntent.LoadStories>()
 
     private val story: Story by lazy {
         val storyType: String? = arguments?.getString(KEY_STORY)
@@ -64,7 +64,7 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
         super.onViewCreated(view, savedInstanceState)
 
         refresh_layout.setOnRefreshListener {
-            refreshIntentPublisher.onNext(StoriesIntent.RefreshIntent(true, story))
+            refreshIntentPublisher.onNext(StoriesIntent.RefreshIntent(story))
         }
 
         stories_recycler_view.bind(emptyList<Item>()).map(R.layout.item_stories, { true }, { item ->
@@ -75,10 +75,11 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
             override fun loadMore() {
                 val page: Int = stories_recycler_view.tag as? Int ?: 1
                 val storyRequest = StoryRequest(page = page, story = story)
-                loadMoreIntentPublisher
-                    .onNext(StoriesIntent.LoadMoreIntent(storyRequest))
+                loadMoreIntentPublisher.onNext(StoriesIntent.LoadStories(storyRequest))
             }
         })
+
+        refreshIntentPublisher.onNext(StoriesIntent.RefreshIntent(story))
     }
 
     override fun injectDependencies() {
@@ -90,7 +91,6 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
     }
 
     override fun intents(): Observable<StoriesIntent> = Observable.merge(
-        initialIntents(),
         refreshIntents(),
         loadMoreIntents()
     )
@@ -112,8 +112,6 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
             }
             stories_recycler_view.tag = state.nextPage
             refresh_layout.isRefreshing = false
-            Timber.i("Good ${stories_recycler_view.adapter?.itemCount ?: -1}")
-//            stories_recycler_view.scrollToPosition(0)
         }
     }
 
@@ -124,11 +122,10 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
         val createdOn = view.findViewById<TextView>(R.id.created_on)
 
         title?.text = item.title
-        author?.text = "by ${item.by}"
-
+        author?.text = getString(R.string.story_label_by, item.by)
 
         item.kids?.let {
-            commentCount?.text = "${it.size} comments"
+            commentCount?.text = getString(R.string.story_label_comments, it.size.toString())
         }
 
         view.setOnClickListener {
@@ -151,11 +148,8 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
             }
     }
 
-    private fun initialIntents(): Observable<StoriesIntent.InitialIntent> =
-        Observable.just(StoriesIntent.InitialIntent(story))
-
     private fun refreshIntents(): Observable<StoriesIntent.RefreshIntent> = refreshIntentPublisher
 
-    private fun loadMoreIntents(): Observable<StoriesIntent.LoadMoreIntent> = loadMoreIntentPublisher
+    private fun loadMoreIntents(): Observable<StoriesIntent.LoadStories> = loadMoreIntentPublisher
         .distinctUntilChanged()
 }

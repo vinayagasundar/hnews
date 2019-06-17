@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">hnews</string>
+
+    <string name="story_label_by">by %s</string>
+    <string name="story_label_comments">%s comments</string>
 </resources>

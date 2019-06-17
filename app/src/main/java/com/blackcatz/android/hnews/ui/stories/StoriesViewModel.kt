@@ -4,9 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.blackcatz.android.hnews.mvi.android.BaseMviViewModel
 import com.blackcatz.android.hnews.mvi.rx.RxLifeCycle
-import com.blackcatz.android.hnews.mvi.rx.notOfType
+import com.blackcatz.android.hnews.ui.stories.domain.StoryRequest
 import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
 import io.reactivex.functions.BiFunction
 
 typealias StoriesBaseViewModel = BaseMviViewModel<StoriesIntent, StoriesViewState, StoriesAction>
@@ -25,18 +24,9 @@ class StoriesViewModel(
         }
     }
 
-    private val intentFilter: ObservableTransformer<StoriesIntent, StoriesIntent>
-        get() = ObservableTransformer { shared ->
-            Observable.merge(
-                shared.ofType(StoriesIntent.InitialIntent::class.java).take(1),
-                shared.notOfType(StoriesIntent.InitialIntent::class.java)
-            )
-        }
-
     override fun compose(): Observable<StoriesViewState> {
         return intentsSubject
             .compose(rxLifeCycle.async())
-            .compose(intentFilter)
             .map(this::actionFromIntents)
             .compose(storiesActionProcessorHolder.actionProcessor)
             .scan(StoriesViewState.idle(), reducer)
@@ -47,9 +37,13 @@ class StoriesViewModel(
 
     override fun actionFromIntents(intents: StoriesIntent): StoriesAction {
         return when (intents) {
-            is StoriesIntent.InitialIntent -> StoriesAction.LoadStoriesAction(intents.story, false)
-            is StoriesIntent.RefreshIntent -> StoriesAction.LoadStoriesAction(intents.story, intents.forcedUpdate)
-            is StoriesIntent.LoadMoreIntent -> StoriesAction.LoadMoreStoriesAction(intents.storyRequest)
+            is StoriesIntent.RefreshIntent -> StoriesAction.LoadStoriesAction(
+                StoryRequest(
+                    story = intents.story,
+                    forceUpdate = true
+                )
+            )
+            is StoriesIntent.LoadStories -> StoriesAction.LoadStoriesAction(intents.storyRequest)
         }
     }
 
@@ -60,28 +54,17 @@ class StoriesViewModel(
                     previousState.copy(isLoading = true)
                 }
                 is StoriesResult.LoadStoriesResult.Success -> {
-                    previousState.copy(isLoading = false, itemList = result.stories, nextPage = 1)
+                    val items = previousState.itemList + result.storyResponse.stories
+                    val nextPage = result.storyResponse.page + 1
+                    previousState.copy(
+                        itemList = items,
+                        nextPage = nextPage,
+                        isLoading = false
+                    )
                 }
 
                 is StoriesResult.LoadStoriesResult.Error -> {
                     previousState.copy(error = result.throwable, isLoading = false)
-                }
-            }
-
-            is StoriesResult.LoadMoreStoriesResult -> when (result) {
-                is StoriesResult.LoadMoreStoriesResult.Success -> {
-                    val items = previousState.itemList + result.storyResponse.stories
-                    previousState.copy(
-                        itemList = items,
-                        nextPage = result.storyResponse.page + 1,
-                        isLoading = false
-                    )
-                }
-                is StoriesResult.LoadMoreStoriesResult.Error -> {
-                    previousState.copy(error = result.throwable, isLoading = false)
-                }
-                StoriesResult.LoadMoreStoriesResult.Loading -> {
-                    previousState.copy(isLoading = true)
                 }
             }
         }

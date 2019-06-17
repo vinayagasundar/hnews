@@ -8,7 +8,8 @@ const val DEFAULT_ITEM_SIZE = 20
 data class StoryRequest(
     val page: Int = 0,
     val story: Story,
-    val size: Int = DEFAULT_ITEM_SIZE
+    val size: Int = DEFAULT_ITEM_SIZE,
+    val forceUpdate: Boolean = false
 )
 
 data class StoryResponse(

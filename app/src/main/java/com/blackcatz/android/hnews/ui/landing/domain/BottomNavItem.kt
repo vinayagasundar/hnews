@@ -11,7 +11,7 @@ val ASK_STORIES = BottomNavItem("Ask", R.drawable.ic_ask, Story.ASK)
 val SHOW_STORIES = BottomNavItem("Show", R.drawable.ic_show, Story.SHOW)
 val JOB_STORIES = BottomNavItem("Job", R.drawable.ic_job, Story.JOB)
 
-val ALL_STORIES = arrayOf(TOP_STORIES, ASK_STORIES, SHOW_STORIES, JOB_STORIES)
+val ALL_STORIES = arrayOf(TOP_STORIES, /*ASK_STORIES, */SHOW_STORIES, JOB_STORIES)
 
 data class BottomNavItem(
     val title: String,

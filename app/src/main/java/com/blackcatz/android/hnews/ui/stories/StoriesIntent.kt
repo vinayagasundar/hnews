@@ -5,7 +5,6 @@ import com.blackcatz.android.hnews.mvi.MviIntent
 import com.blackcatz.android.hnews.ui.stories.domain.StoryRequest
 
 sealed class StoriesIntent : MviIntent {
-    data class InitialIntent(val story: Story) : StoriesIntent()
-    data class RefreshIntent(val forcedUpdate: Boolean, val story: Story) : StoriesIntent()
-    data class LoadMoreIntent(val storyRequest: StoryRequest): StoriesIntent()
+    data class RefreshIntent(val story: Story) : StoriesIntent()
+    data class LoadStories(val storyRequest: StoryRequest) : StoriesIntent()
 }

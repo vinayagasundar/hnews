@@ -18,19 +18,6 @@ class ItemRepoImplTest {
     private val listOfIds = listOf<Long>(100, 200)
 
     @Test
-    fun `should return Items for given Story`() {
-        whenever(hackerAPI.getAskStories()).thenReturn(Single.just(listOfIds))
-        whenever(hackerAPI.getItem(any())).thenReturn(Single.just(MockItem.itemOne))
-
-        itemRepo.getStories(Story.ASK)
-            .test()
-            .assertValue {
-                it[0] == MockItem.itemOne
-            }
-            .dispose()
-    }
-
-    @Test
     fun `should return Items for given story, page and size`() {
         whenever(hackerAPI.getAskStories()).thenReturn(Single.just(listOfIds))
         whenever(hackerAPI.getItem(any())).thenReturn(Single.just(MockItem.itemOne))
