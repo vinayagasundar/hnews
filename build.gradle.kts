@@ -22,12 +22,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven {
-            setUrl("https://dl.bintray.com/vinayagasundar/BlackCatz/")
-        }
-        maven {
-            setUrl("https://oss.sonatype.org/content/repositories/snapshots")
-        }
     }
 
     if ((group as String).isNotEmpty()) {
