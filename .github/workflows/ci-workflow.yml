@@ -1,5 +1,11 @@
 name: Build WorkFlow
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
@@ -15,7 +21,7 @@ jobs:
         run: git submodule sync --recursive && git submodule update --init --recursive
 
       - name: Set gradle permissions
-        run: sudo chmod +x android-app/gradlew
+        run: sudo chmod +x gradlew
       - name: Download dependencies
         run: |
           ./gradlew app:dependencies

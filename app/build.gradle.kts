@@ -62,6 +62,4 @@ dependencies {
 
     androidTestImplementation(AppConfig.Libs.AndroidTest.testRunner)
     androidTestImplementation(AppConfig.Libs.AndroidTest.espressoCore)
-
-    debugImplementation(AppConfig.Libs.Debug.dbDebug)
 }
