@@ -16,18 +16,22 @@ import org.junit.Test
 
 class StoriesViewModelTest {
 
-    private val rxLifeCycle: RxLifeCycle = TestRxLifeCycle()
-    private val itemRepo: ItemRepo = mock()
-    private val storiesActionProcessorHolder = StoriesActionProcessorHolder(itemRepo, rxLifeCycle)
+    private lateinit var rxLifeCycle: RxLifeCycle
+    private lateinit var itemRepo: ItemRepo
+    private lateinit var storiesActionProcessorHolder: StoriesActionProcessorHolder
     private lateinit var viewModel: StoriesViewModel
 
     @Before
     fun setUp() {
+        rxLifeCycle = TestRxLifeCycle()
+        itemRepo = mock()
+        storiesActionProcessorHolder = StoriesActionProcessorHolder(itemRepo, rxLifeCycle)
         viewModel = StoriesViewModel(storiesActionProcessorHolder, rxLifeCycle)
     }
 
     @Test
     fun `should Return story for when InitialIntent is called`() {
+        // given
         whenever(
             itemRepo.getStories(
                 0,
@@ -40,20 +44,27 @@ class StoriesViewModelTest {
         viewModel.processIntents(intentPublisher.hide())
         val testObserver = viewModel.states()
             .test()
+
+        // when
         intentPublisher.onNext(StoriesIntent.RefreshIntent(Story.ASK))
+
+        // then
+        val expectStoriesViewStateList = listOf(
+            StoriesViewState(false, emptyList(), null),
+            StoriesViewState(true, emptyList(), null),
+            StoriesViewState(false, MockItem.allItems, null, 1)
+        )
         testObserver
-            .assertValueAt(0) {
-                it == StoriesViewState(false, emptyList(), null, 0)
-            }
-            .assertValueAt(1) {
-                it == StoriesViewState(false, MockItem.allItems, null, 1)
-            }
+            .assertValueSequence(expectStoriesViewStateList)
+            .assertNoErrors()
+            .assertNotComplete()
             .dispose()
     }
 
 
     @Test
     fun `should return All Story when RefreshIntent is called`() {
+        // given
         whenever(
             itemRepo.getStories(
                 0,
@@ -66,22 +77,29 @@ class StoriesViewModelTest {
         viewModel.processIntents(intentPublisher.hide())
         val testObserver = viewModel.states()
             .test()
+
+        // when
         intentPublisher.onNext(StoriesIntent.RefreshIntent(Story.ASK))
+
+        // then
+        val expectStoriesViewStateList = listOf(
+            StoriesViewState(false, emptyList(), null),
+            StoriesViewState(true, emptyList(), null),
+            StoriesViewState(false, MockItem.allItems, null, 1)
+        )
         testObserver
-            .assertValueAt(0) {
-                it == StoriesViewState(false, emptyList(), null, 0)
-            }
-            .assertValueAt(1) {
-                it == StoriesViewState(false, MockItem.allItems, null, 1)
-            }
+            .assertValueSequence(expectStoriesViewStateList)
+            .assertNoErrors()
+            .assertNotComplete()
             .dispose()
     }
 
     @Test
     fun `should return next list of stories when LoadMoreIntent called`() {
-        whenever(itemRepo.getStories(0, 1, Story.ASK, true))
+        // given
+        whenever(itemRepo.getStories(0, 1, Story.ASK, false))
             .thenReturn(Single.just(listOf(MockItem.itemOne)))
-        whenever(itemRepo.getStories(1, 1, Story.ASK, true))
+        whenever(itemRepo.getStories(1, 1, Story.ASK, false))
             .thenReturn(Single.just(listOf(MockItem.itemTwo)))
 
         val intentPublisher = PublishSubject.create<StoriesIntent>()
@@ -89,17 +107,22 @@ class StoriesViewModelTest {
         val testObserver = viewModel.states()
             .test()
 
+        // when
         intentPublisher.onNext(StoriesIntent.LoadStories(StoryRequest(0, Story.ASK, 1)))
-
-        testObserver.assertValueAt(1) {
-            it == StoriesViewState(false, listOf(MockItem.itemOne), null, 1)
-        }
-
         intentPublisher.onNext(StoriesIntent.LoadStories(StoryRequest(1, Story.ASK, 1)))
 
-        testObserver.assertValueAt(2) {
-            it == StoriesViewState(false, listOf(MockItem.itemOne, MockItem.itemTwo), null, 2)
-        }.dispose()
+        // then
+        val expectStoriesViewStateList = listOf(
+            StoriesViewState(false, emptyList(), null),
+            StoriesViewState(true, emptyList(), null),
+            StoriesViewState(false, listOf(MockItem.itemOne), null, 1),
+            StoriesViewState(false, listOf(MockItem.itemOne, MockItem.itemTwo), null, 2)
+        )
+
+        testObserver.assertValueSequence(expectStoriesViewStateList)
+            .assertNoErrors()
+            .assertNotComplete()
+            .dispose()
     }
 
 }
