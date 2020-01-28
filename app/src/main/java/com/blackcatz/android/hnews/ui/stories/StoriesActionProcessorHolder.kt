@@ -16,7 +16,7 @@ class StoriesActionProcessorHolder(
         ObservableTransformer<LoadStoriesAction, LoadStoriesResult> { actions ->
             actions.flatMapSingle {
                 val request = it.storyRequest
-                itemRepo.getStories(request.page, request.size, request.story)
+                itemRepo.getStories(request.page, request.size, request.story, request.forceUpdate)
                     .compose(rxLifeCycle.async())
                     .map { stories ->
                         LoadStoriesResult.Success(
@@ -32,6 +32,6 @@ class StoriesActionProcessorHolder(
         }
 
     internal val actionProcessor = ObservableTransformer<StoriesAction, StoriesResult> { actions ->
-        actions.ofType(StoriesAction.LoadStoriesAction::class.java).compose(loadTaskProcessor)
+        actions.ofType(LoadStoriesAction::class.java).compose(loadTaskProcessor)
     }
 }
