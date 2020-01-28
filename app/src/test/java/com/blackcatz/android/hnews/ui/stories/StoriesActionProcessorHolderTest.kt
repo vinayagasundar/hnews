@@ -10,6 +10,7 @@ import com.blackcatz.android.hnews.ui.stories.domain.StoryRequest
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Observable
+import io.reactivex.Single
 import org.junit.Test
 
 class StoriesActionProcessorHolderTest {
@@ -22,7 +23,11 @@ class StoriesActionProcessorHolderTest {
 
     @Test
     fun `should return LoadStoriesResult given LoadStoriesAction`() {
-        whenever(itemRepo.getStories(0, DEFAULT_ITEM_SIZE, Story.ASK, true)).thenReturn(Observable.just(allItems))
+        whenever(itemRepo.getStories(0, DEFAULT_ITEM_SIZE, Story.ASK, true)).thenReturn(
+            Single.just(
+                allItems
+            )
+        )
         Observable.just(StoriesAction.LoadStoriesAction(StoryRequest(story = Story.ASK)))
             .compose(actionProcessorHolder.actionProcessor)
             .test()

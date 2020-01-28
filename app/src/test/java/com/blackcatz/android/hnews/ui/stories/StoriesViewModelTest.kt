@@ -9,7 +9,7 @@ import com.blackcatz.android.hnews.ui.stories.domain.DEFAULT_ITEM_SIZE
 import com.blackcatz.android.hnews.ui.stories.domain.StoryRequest
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
@@ -35,7 +35,7 @@ class StoriesViewModelTest {
                 Story.ASK,
                 true
             )
-        ).thenReturn(Observable.just(MockItem.allItems))
+        ).thenReturn(Single.just(MockItem.allItems))
         val intentPublisher = PublishSubject.create<StoriesIntent>()
         viewModel.processIntents(intentPublisher.hide())
         val testObserver = viewModel.states()
@@ -61,7 +61,7 @@ class StoriesViewModelTest {
                 Story.ASK,
                 true
             )
-        ).thenReturn(Observable.just(MockItem.allItems))
+        ).thenReturn(Single.just(MockItem.allItems))
         val intentPublisher = PublishSubject.create<StoriesIntent>()
         viewModel.processIntents(intentPublisher.hide())
         val testObserver = viewModel.states()
@@ -80,9 +80,9 @@ class StoriesViewModelTest {
     @Test
     fun `should return next list of stories when LoadMoreIntent called`() {
         whenever(itemRepo.getStories(0, 1, Story.ASK, true))
-            .thenReturn(Observable.just(listOf(MockItem.itemOne)))
+            .thenReturn(Single.just(listOf(MockItem.itemOne)))
         whenever(itemRepo.getStories(1, 1, Story.ASK, true))
-            .thenReturn(Observable.just(listOf(MockItem.itemTwo)))
+            .thenReturn(Single.just(listOf(MockItem.itemTwo)))
 
         val intentPublisher = PublishSubject.create<StoriesIntent>()
         viewModel.processIntents(intentPublisher.hide())
