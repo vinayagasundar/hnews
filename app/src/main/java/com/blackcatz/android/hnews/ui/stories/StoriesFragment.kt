@@ -2,18 +2,15 @@ package com.blackcatz.android.hnews.ui.stories
 
 import android.net.Uri
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.blackcatz.android.hnews.R
-import com.blackcatz.android.hnews.adapter.FastListAdapter
-import com.blackcatz.android.hnews.adapter.bind
 import com.blackcatz.android.hnews.di.AppComponentProvider
 import com.blackcatz.android.hnews.model.Item
 import com.blackcatz.android.hnews.model.Story
@@ -26,7 +23,8 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_stories.*
 import javax.inject.Inject
 
-class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesViewModel>() {
+class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesViewModel>(),
+    ItemAdapter.Callback {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -39,6 +37,8 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
         val storyType: String? = arguments?.getString(KEY_STORY)
         storyType?.let { Story.fromType(it) } ?: Story.TOP
     }
+
+    private val adapter: ItemAdapter = ItemAdapter(this)
 
     companion object {
         private const val KEY_STORY = "story"
@@ -56,7 +56,11 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
         return ViewModelProviders.of(this, viewModelFactory)[StoriesViewModel::class.java]
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_stories, container, false)
     }
 
@@ -67,10 +71,8 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
             refreshIntentPublisher.onNext(StoriesIntent.RefreshIntent(story))
         }
 
-        stories_recycler_view.bind(emptyList<Item>()).map(R.layout.item_stories, { true }, { item ->
-            bindViewHolder(this, item)
-        })
-
+        stories_recycler_view.adapter = adapter
+        stories_recycler_view.layoutManager = LinearLayoutManager(requireContext())
         stories_recycler_view.addOnScrollListener(object : LoadMoreScrollListener() {
             override fun loadMore() {
                 val page: Int = stories_recycler_view.tag as? Int ?: 1
@@ -107,49 +109,21 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
         stories_recycler_view.visibility = View.VISIBLE
 
         if (state.itemList.isNotEmpty()) {
-            (stories_recycler_view.adapter as? FastListAdapter<Item>)?.update(state.itemList) { o, n ->
-                o.id == n.id
-            }
-            stories_recycler_view.tag = state.nextPage
-            refresh_layout.isRefreshing = false
+            adapter.submitList(state.itemList)
         }
     }
 
-    private fun bindViewHolder(view: View, item: Item) {
-        val title = view.findViewById<TextView>(R.id.title)
-        val author = view.findViewById<TextView>(R.id.author)
-        val commentCount = view.findViewById<TextView>(R.id.comments)
-        val createdOn = view.findViewById<TextView>(R.id.created_on)
-
-        title?.text = item.title
-        author?.text = getString(R.string.story_label_by, item.by)
-
-        item.kids?.let {
-            commentCount?.text = getString(R.string.story_label_comments, it.size.toString())
+    override fun onItemSelected(item: Item) {
+        val url = item.url
+        url?.let { itemUrl ->
+            val builder = CustomTabsIntent.Builder()
+            builder.setToolbarColor(ContextCompat.getColor(requireContext(), R.color.primaryColor))
+            val intent = builder.build()
+            intent.launchUrl(requireContext(), Uri.parse(itemUrl))
         }
-
-        view.setOnClickListener {
-            val url = item.url
-            url?.let { itemUrl ->
-                val builder = CustomTabsIntent.Builder()
-                builder.setToolbarColor(ContextCompat.getColor(view.context, R.color.primaryColor))
-                val intent = builder.build()
-                intent.launchUrl(this.context, Uri.parse(itemUrl))
-            }
-        }
-
-        createdOn?.text =
-            item.time?.let {
-                DateUtils.getRelativeTimeSpanString(
-                    this@StoriesFragment.context,
-                    it * 1000,
-                    true
-                )
-            }
     }
 
-    private fun refreshIntents(): Observable<StoriesIntent.RefreshIntent> = refreshIntentPublisher
+    private fun refreshIntents() = refreshIntentPublisher
 
-    private fun loadMoreIntents(): Observable<StoriesIntent.LoadStories> = loadMoreIntentPublisher
-        .distinctUntilChanged()
+    private fun loadMoreIntents() = loadMoreIntentPublisher.distinctUntilChanged()
 }

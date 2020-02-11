@@ -9,7 +9,10 @@ import com.blackcatz.android.hnews.ui.stories.StoriesFragment
 /**
  * @author vinayagasundar
  */
-class NavAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+class NavAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
+    fragmentManager,
+    BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+) {
 
     private val list = ALL_STORIES
 

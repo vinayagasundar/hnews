@@ -16,7 +16,7 @@ interface ItemRepo {
 }
 
 
-class ItemRepoImpl(
+internal class ItemRepoImpl(
     private val hackerAPI: HackerAPI
 ) : ItemRepo {
 
