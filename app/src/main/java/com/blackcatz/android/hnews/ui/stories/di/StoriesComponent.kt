@@ -20,14 +20,12 @@ interface StoriesDependenciesComponent {
 @Component(dependencies = [StoriesDependenciesComponent::class], modules = [StoriesModule::class])
 interface StoriesComponent {
 
-    @Component.Builder
-    interface Builder {
-        fun plusDependencies(storiesComponent: StoriesDependenciesComponent): Builder
-
-        @BindsInstance
-        fun rxLifeCycle(rxBind: RxLifeCycle): Builder
-
-        fun build(): StoriesComponent
+    @Component.Factory
+    interface Factory {
+        fun create(
+            dependencies: StoriesDependenciesComponent,
+            @BindsInstance rxBind: RxLifeCycle
+        ): StoriesComponent
     }
 
     fun inject(storiesFragment: StoriesFragment)

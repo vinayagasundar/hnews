@@ -63,9 +63,9 @@ class LandingActivity : AppCompatActivity() {
     }
 
     private fun injectDependencies() {
-        DaggerLandingComponent.builder()
-            .plusDependencies((application as AppComponentProvider).provideAppComponent())
-            .build()
+        val dependencies = (application as AppComponentProvider).provideAppComponent()
+        DaggerLandingComponent.factory()
+            .create(dependencies)
             .inject(this)
     }
 }

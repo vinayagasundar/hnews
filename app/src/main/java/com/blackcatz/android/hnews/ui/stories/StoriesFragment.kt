@@ -85,10 +85,10 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
     }
 
     override fun injectDependencies() {
-        DaggerStoriesComponent.builder()
-            .plusDependencies((context?.applicationContext as AppComponentProvider).provideAppComponent())
-            .rxLifeCycle(this)
-            .build()
+        val dependencies = (context?.applicationContext as AppComponentProvider)
+            .provideAppComponent()
+        DaggerStoriesComponent.factory()
+            .create(dependencies, this)
             .inject(this)
     }
 

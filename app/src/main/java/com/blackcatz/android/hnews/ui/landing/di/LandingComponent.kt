@@ -15,10 +15,9 @@ interface LandingDependencies {
 @Component(modules = [LandingModule::class], dependencies = [LandingDependencies::class])
 interface LandingComponent {
 
-    @Component.Builder
+    @Component.Factory
     interface Builder {
-        fun plusDependencies(dependencies: LandingDependencies): Builder
-        fun build(): LandingComponent
+        fun create(dependencies: LandingDependencies): LandingComponent
     }
 
     fun inject(landingActivity: LandingActivity)
