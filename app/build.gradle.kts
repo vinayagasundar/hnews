@@ -50,7 +50,7 @@ dependencies {
     implementation(AppConfig.Libs.RxJava.rxJava)
     implementation(AppConfig.Libs.RxJava.rxJavaAndroid)
 
-    implementation(AppConfig.Libs.Debug.timerLogger)
+    implementation(AppConfig.Libs.Debug.timberLogger)
 
     kapt(AppConfig.Libs.Dagger.daggerCompiler)
     kapt(AppConfig.Libs.Dagger.daggerAndroidCompiler)
