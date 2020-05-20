@@ -6,9 +6,9 @@ import com.blackcatz.android.hnews.mvi.MviIntent
 import com.blackcatz.android.hnews.mvi.MviView
 import com.blackcatz.android.hnews.mvi.MviViewModel
 import com.blackcatz.android.hnews.mvi.MviViewState
+import com.blackcatz.android.hnews.mvi.rx.AsyncTransformer
 import com.blackcatz.android.hnews.mvi.rx.RxLifeCycle
 import com.blackcatz.android.hnews.mvi.rx.RxTransformer
-import com.blackcatz.android.hnews.mvi.rx.AsyncTransformer
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
@@ -41,13 +41,18 @@ abstract class MviAppActivity<I : MviIntent, S : MviViewState, out VM : MviViewM
 
     override fun onStop() {
         super.onStop()
+        unBind()
+    }
+
+    private fun unBind() {
         compositeDisposable.clear()
     }
 
-
     private fun bind() {
         bind {
-            viewModel.states().subscribe(this::render, Timber::e)
+            viewModel.states()
+                .compose(async())
+                .subscribe(this::render, Timber::e)
         }
         viewModel.processIntents(intents())
     }

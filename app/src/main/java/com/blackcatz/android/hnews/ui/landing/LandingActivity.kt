@@ -35,18 +35,19 @@ class LandingActivity : AppCompatActivity() {
 
     private fun getAllTabs() {
         loading_bar.visibility = View.VISIBLE
-        loading_bar.visibility = View.GONE
 
         val list = viewModel.getNavViews()
 
         list.forEach {
-            item_bottom_nav.menu.add(Menu.NONE, 1, Menu.NONE, it.title)
+            item_bottom_nav.menu.add(Menu.NONE, it.id, Menu.NONE, it.title)
                 .setIcon(it.icon)
         }
 
         val navAdapter = NavAdapter(supportFragmentManager)
         stories_holder.adapter = navAdapter
         stories_holder.visibility = View.VISIBLE
+        loading_bar.visibility = View.GONE
+
 
         item_bottom_nav.setOnNavigationItemSelectedListener {
             stories_holder.currentItem = when (it.title) {

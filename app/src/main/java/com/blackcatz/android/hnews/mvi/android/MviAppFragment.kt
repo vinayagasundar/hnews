@@ -44,7 +44,9 @@ abstract class MviAppFragment<I : MviIntent, S : MviViewState, out VM : MviViewM
 
     private fun bind() {
         bind {
-            viewModel.states().subscribe(this::render, Timber::e)
+            viewModel.states()
+                .compose(async())
+                .subscribe(this::render, Timber::e)
         }
         viewModel.processIntents(intents())
     }
