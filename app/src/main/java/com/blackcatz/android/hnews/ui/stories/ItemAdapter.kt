@@ -13,11 +13,15 @@ import com.blackcatz.android.hnews.model.Item
 
 private val DIFF_ITEM_CALLBACK_FOR_ITEM = object : DiffUtil.ItemCallback<Item>() {
     override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
-        return oldItem == newItem
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem == newItem
+    }
+
+    override fun getChangePayload(oldItem: Item, newItem: Item): Any? {
+        return newItem
     }
 }
 

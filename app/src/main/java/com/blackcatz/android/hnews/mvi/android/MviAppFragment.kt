@@ -28,18 +28,13 @@ abstract class MviAppFragment<I : MviIntent, S : MviViewState, out VM : MviViewM
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies()
-        super.onCreate(savedInstanceState)
-
-    }
-
-    override fun onStart() {
-        super.onStart()
         bind()
+        super.onCreate(savedInstanceState)
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
         unBind()
+        super.onDestroy()
     }
 
     private fun bind() {

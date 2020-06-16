@@ -39,7 +39,7 @@ class NetworkModule {
 
     @Provides
     fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl(" https://hacker-news.firebaseio.com/v0/")
+        .baseUrl("https://hacker-news.firebaseio.com/v0/")
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
