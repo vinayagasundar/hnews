@@ -10,6 +10,6 @@ data class StoriesViewState(
     val nextPage: Int = 0
 ) : MviViewState {
     companion object {
-        fun idle() = StoriesViewState(false, emptyList(), null)
+        val empty = StoriesViewState(false, emptyList(), null)
     }
 }

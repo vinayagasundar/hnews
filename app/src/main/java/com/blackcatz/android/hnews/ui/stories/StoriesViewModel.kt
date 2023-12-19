@@ -2,6 +2,7 @@ package com.blackcatz.android.hnews.ui.stories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.blackcatz.android.hnews.model.Story
 import com.blackcatz.android.hnews.mvi.android.BaseMviViewModel
 import com.blackcatz.android.hnews.mvi.rx.RxLifeCycle
 import com.blackcatz.android.hnews.ui.stories.domain.StoryRequest
@@ -19,17 +20,17 @@ class StoriesViewModel(
         private val storiesActionProcessorHolder: StoriesActionProcessorHolder,
         private val rxLifeCycle: RxLifeCycle
     ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return StoriesViewModel(storiesActionProcessorHolder, rxLifeCycle) as T
         }
     }
 
     override fun compose(): Observable<StoriesViewState> {
         return intentsSubject
-            .compose(rxLifeCycle.async())
             .map(this::actionFromIntents)
             .compose(storiesActionProcessorHolder.actionProcessor)
-            .scan(StoriesViewState.idle(), reducer)
+            .scan(StoriesViewState.empty, reducer)
+            .compose(rxLifeCycle.async())
             .distinctUntilChanged()
             .replay(1)
             .autoConnect()
@@ -43,6 +44,7 @@ class StoriesViewModel(
                     forceUpdate = true
                 )
             )
+
             is StoriesIntent.LoadStories -> StoriesAction.LoadStoriesAction(intents.storyRequest)
         }
     }
@@ -53,6 +55,7 @@ class StoriesViewModel(
                 is StoriesResult.LoadStoriesResult.Loading -> {
                     previousState.copy(isLoading = true)
                 }
+
                 is StoriesResult.LoadStoriesResult.Success -> {
                     val items = previousState.itemList + result.storyResponse.stories
                     val nextPage = result.storyResponse.page + 1

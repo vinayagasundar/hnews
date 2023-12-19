@@ -10,6 +10,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.blackcatz.android.hnews.R
 import com.blackcatz.android.hnews.di.AppComponentProvider
 import com.blackcatz.android.hnews.model.Item
@@ -20,7 +22,6 @@ import com.blackcatz.android.hnews.ui.stories.domain.StoryRequest
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.fragment_stories.*
 import javax.inject.Inject
 
 class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesViewModel>(),
@@ -28,6 +29,9 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private lateinit var refresh_layout: SwipeRefreshLayout
+    private lateinit var stories_recycler_view: RecyclerView
 
     private val refreshIntentPublisher = BehaviorSubject.create<StoriesIntent.RefreshIntent>()
 

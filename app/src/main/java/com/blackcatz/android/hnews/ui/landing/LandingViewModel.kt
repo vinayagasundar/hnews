@@ -9,7 +9,7 @@ import com.blackcatz.android.hnews.ui.landing.domain.BottomNavItem
 class LandingViewModel : ViewModel() {
 
     class Factory : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return LandingViewModel() as T
         }
     }
