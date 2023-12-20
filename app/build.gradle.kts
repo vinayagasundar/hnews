@@ -1,56 +1,68 @@
 plugins {
-    id ("com.android.application")
-    id ("org.jetbrains.kotlin.android")
-    id ("kotlin-kapt")
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id(libs.plugins.androidx.room.get().pluginId)
+    id(libs.plugins.ksp.get().pluginId)
 //    id ("dagger.hilt.android.plugin")
 }
 
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 android {
-    compileSdk=34
+    compileSdk = 34
 
     defaultConfig {
-        namespace="com.blackcatz.android.hnews"
+        namespace = "com.blackcatz.android.hnews"
 
-        applicationId="com.blackcatz.android.hnews"
-        minSdk=21
-        targetSdk=33
-        versionCode=1
-        versionName="1.0"
+        applicationId = "com.blackcatz.android.hnews"
+        minSdk = 21
+        targetSdk = 33
+        versionCode = 1
+        versionName = "1.0"
 
         vectorDrawables {
-            useSupportLibrary=true
+            useSupportLibrary = true
         }
-
-//        javaCompileOptions {
-//            annotationProcessorOptions {
-//                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
-//            }
-//        }
     }
 
-//    buildTypes {
-//        release {
-//            minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//        }
-//    }
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = true
+            proguardFiles.addAll(
+                listOf(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    file("proguard-rules.pro")
+                )
+            )
+        }
+    }
+
+    sourceSets {
+        getByName("test") {
+            java.srcDirs(listOf(file("src/commonTest/java")))
+        }
+    }
+
     compileOptions {
-        sourceCompatibility=JavaVersion.VERSION_1_8
-        targetCompatibility=JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = "1.8"
     }
     buildFeatures {
-        compose=true
-        buildConfig=true
+        compose = true
+        buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion=libs.versions.compose.get()
+        kotlinCompilerExtensionVersion = libs.versions.compose.get()
     }
-    packagingOptions {
+    packaging {
         resources {
-//            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
 }
@@ -68,47 +80,14 @@ dependencies {
     implementation(libs.dagger.core)
     implementation(libs.coroutine.android)
     implementation(libs.timberLog)
+    implementation(libs.rxjava.core)
     implementation(libs.rxjava.android)
     implementation(libs.appcompat)
     implementation(libs.lifecycle.extension)
     implementation("com.android.support:customtabs:28.0.0")
     kapt(libs.dagger.core.compiler)
-    kapt(libs.room.compiler)
+    ksp(libs.room.compiler)
     debugImplementation(libs.compose.debug.tool)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.kotlin)
 }
-
-// dependencies {
-//     implementation(AppConfig.Libs.Kotlin.coroutineAndroid)
-//     implementation(AppConfig.Libs.Support.appCompat)
-//     implementation(AppConfig.Libs.Support.constraitLayout)
-
-//     implementation(AppConfig.Libs.Support.materialDesign)
-//     implementation(AppConfig.Libs.Support.recyclerView)
-
-//     implementation(AppConfig.Libs.Support.lifeCycle)
-//     implementation(AppConfig.Libs.Support.customTabs)
-
-//     implementation(AppConfig.Libs.Dagger.daggerAndroid)
-//     implementation(AppConfig.Libs.Dagger.daggerAndroidSupport)
-
-//     implementation(AppConfig.Libs.Network.retrofit2)
-//     implementation(AppConfig.Libs.Network.okhttpLogger)
-//     implementation(AppConfig.Libs.Network.gsonConv)
-//     implementation(AppConfig.Libs.Network.rxJavaAdapter)
-
-//     implementation(AppConfig.Libs.RxJava.rxJava)
-//     implementation(AppConfig.Libs.RxJava.rxJavaAndroid)
-
-//     implementation(AppConfig.Libs.Debug.timberLogger)
-
-//     kapt(AppConfig.Libs.Dagger.daggerCompiler)
-//     kapt(AppConfig.Libs.Dagger.daggerAndroidCompiler)
-
-//     testImplementation(AppConfig.Libs.Test.junit)
-//     testImplementation(AppConfig.Libs.Support.roomTestHelper)
-//     testImplementation(AppConfig.Libs.Test.Mockito.nhaarmanMock)
-//     testImplementation(AppConfig.Libs.Network.retrofit2Mock)
-
-//     // androidTestImplementation(AppConfig.Libs.AndroidTest.testRunner)
-//     // androidTestImplementation(AppConfig.Libs.AndroidTest.espressoCore)
-// }

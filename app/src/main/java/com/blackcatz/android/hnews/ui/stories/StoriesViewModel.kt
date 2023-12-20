@@ -49,17 +49,17 @@ class StoriesViewModel(
         }
     }
 
-    private val reducer = BiFunction { previousState: StoriesViewState, result: StoriesResult ->
-        when (result) {
-            is StoriesResult.LoadStoriesResult -> when (result) {
-                is StoriesResult.LoadStoriesResult.Loading -> {
-                    previousState.copy(isLoading = true)
+    private val reducer =
+        BiFunction<StoriesViewState, StoriesResult, StoriesViewState> { prev: StoriesViewState, result: StoriesResult ->
+            when (result) {
+                StoriesResult.LoadStoriesResult.Loading -> {
+                    prev.copy(isLoading = true)
                 }
 
                 is StoriesResult.LoadStoriesResult.Success -> {
-                    val items = previousState.itemList + result.storyResponse.stories
+                    val items = prev.itemList + result.storyResponse.stories
                     val nextPage = result.storyResponse.page + 1
-                    previousState.copy(
+                    prev.copy(
                         itemList = items,
                         nextPage = nextPage,
                         isLoading = false
@@ -67,9 +67,8 @@ class StoriesViewModel(
                 }
 
                 is StoriesResult.LoadStoriesResult.Error -> {
-                    previousState.copy(error = result.throwable, isLoading = false)
+                    prev.copy(error = result.throwable, isLoading = false)
                 }
             }
         }
-    }
 }

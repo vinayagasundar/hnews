@@ -5,7 +5,7 @@ accompainst = "0.23.1"
 activity = "1.8.2"
 compose = "1.5.4"
 core = "1.12.0"
-coroutine = "1.6.4"
+coroutine = "1.7.1"
 dagger = "2.49"
 datastore = "1.0.0"
 lifecycle = "2.6.2"
@@ -13,6 +13,7 @@ navigation = "2.7.6"
 room = "2.6.1"
 okhttp = "4.9.0"
 retrofit = "2.9.0"
+ksp = "1.9.20-1.0.13"
 
 [libraries]
 appcompat = "androidx.appcompat:appcompat:1.6.1"
@@ -46,9 +47,12 @@ okhttp-logger = { module = "com.squareup.okhttp3:logging-interceptor", version.r
 retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-convertor-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 retrofit-adapter-rxjava = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofit" }
+rxjava-core = {module = "io.reactivex.rxjava2:rxjava", version="2.2.21"}
 rxjava-android = { module = "io.reactivex.rxjava2:rxandroid", version = "2.1.1" }
 
 material = "com.google.android.material:material:1.11.0"
+junit = "junit:junit:4.13.2"
+mockito-kotlin = "com.nhaarman:mockito-kotlin:1.6.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -56,6 +60,8 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 benmans-versions = "com.github.ben-manes.versions:0.41.0"
 version-catalog-update = "nl.littlerobots.version-catalog-update:0.6.1"
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
+androidx-room = { id = "androidx.room", version.ref = "room" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [bundles]
 accompainst = [

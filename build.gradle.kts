@@ -4,5 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.benmans.versions) apply false
     alias(libs.plugins.version.catalog.update) apply false
+    alias(libs.plugins.androidx.room) apply false
+    alias(libs.plugins.ksp) apply false
 //    alias(libs.plugins.hilt.android) apply false
 }
