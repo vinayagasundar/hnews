@@ -30,8 +30,8 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var refresh_layout: SwipeRefreshLayout
-    private lateinit var stories_recycler_view: RecyclerView
+    private lateinit var refreshLayout: SwipeRefreshLayout
+    private lateinit var storiesRecyclerView: RecyclerView
 
     private val refreshIntentPublisher = BehaviorSubject.create<StoriesIntent.RefreshIntent>()
 
@@ -71,15 +71,18 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        refresh_layout.setOnRefreshListener {
+        refreshLayout = view.findViewById(R.id.refresh_layout)
+        storiesRecyclerView = view.findViewById(R.id.stories_recycler_view)
+
+        refreshLayout.setOnRefreshListener {
             refreshIntentPublisher.onNext(StoriesIntent.RefreshIntent(story))
         }
 
-        stories_recycler_view.adapter = adapter
-        stories_recycler_view.layoutManager = LinearLayoutManager(requireContext())
-        stories_recycler_view.addOnScrollListener(object : LoadMoreScrollListener() {
+        storiesRecyclerView.adapter = adapter
+        storiesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        storiesRecyclerView.addOnScrollListener(object : LoadMoreScrollListener() {
             override fun loadMore() {
-                val page: Int = stories_recycler_view.tag as? Int ?: 1
+                val page: Int = storiesRecyclerView.tag as? Int ?: 1
                 val storyRequest = StoryRequest(page = page, story = story)
                 loadMoreIntentPublisher.onNext(StoriesIntent.LoadStories(storyRequest))
             }
@@ -103,14 +106,14 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
 
     override fun render(state: StoriesViewState) {
         if (state.isLoading) {
-            refresh_layout.isRefreshing = true
-            stories_recycler_view.visibility = View.GONE
+            refreshLayout.isRefreshing = true
+            storiesRecyclerView.visibility = View.GONE
         } else {
-            refresh_layout.isRefreshing = false
-            stories_recycler_view.visibility = View.VISIBLE
+            refreshLayout.isRefreshing = false
+            storiesRecyclerView.visibility = View.VISIBLE
         }
 
-        stories_recycler_view.visibility = View.VISIBLE
+        storiesRecyclerView.visibility = View.VISIBLE
 
         if (state.itemList.isNotEmpty()) {
             adapter.submitList(state.itemList)
