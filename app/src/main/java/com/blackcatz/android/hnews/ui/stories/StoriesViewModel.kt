@@ -1,36 +1,24 @@
 package com.blackcatz.android.hnews.ui.stories
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.blackcatz.android.hnews.model.Story
 import com.blackcatz.android.hnews.mvi.android.BaseMviViewModel
-import com.blackcatz.android.hnews.mvi.rx.RxLifeCycle
 import com.blackcatz.android.hnews.ui.stories.domain.StoryRequest
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import javax.inject.Inject
 
 typealias StoriesBaseViewModel = BaseMviViewModel<StoriesIntent, StoriesViewState, StoriesAction>
 
-class StoriesViewModel(
-    private val storiesActionProcessorHolder: StoriesActionProcessorHolder,
-    private val rxLifeCycle: RxLifeCycle
+@HiltViewModel
+class StoriesViewModel @Inject constructor(
+    private val storiesActionProcessorHolder: StoriesActionProcessorHolder
 ) : StoriesBaseViewModel() {
-
-    class Factory(
-        private val storiesActionProcessorHolder: StoriesActionProcessorHolder,
-        private val rxLifeCycle: RxLifeCycle
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return StoriesViewModel(storiesActionProcessorHolder, rxLifeCycle) as T
-        }
-    }
 
     override fun compose(): Observable<StoriesViewState> {
         return intentsSubject
             .map(this::actionFromIntents)
             .compose(storiesActionProcessorHolder.actionProcessor)
             .scan(StoriesViewState.empty, reducer)
-            .compose(rxLifeCycle.async())
             .distinctUntilChanged()
             .replay(1)
             .autoConnect()

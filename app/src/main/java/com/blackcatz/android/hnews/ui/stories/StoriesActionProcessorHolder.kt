@@ -1,6 +1,6 @@
 package com.blackcatz.android.hnews.ui.stories
 
-import com.blackcatz.android.hnews.mvi.rx.RxLifeCycle
+import com.blackcatz.android.hnews.mvi.rx.SchedulerProvider
 import com.blackcatz.android.hnews.repo.ItemRepo
 import com.blackcatz.android.hnews.ui.stories.StoriesAction.LoadStoriesAction
 import com.blackcatz.android.hnews.ui.stories.StoriesResult.LoadStoriesResult
@@ -9,7 +9,7 @@ import io.reactivex.ObservableTransformer
 
 class StoriesActionProcessorHolder(
     private val itemRepo: ItemRepo,
-    private val rxLifeCycle: RxLifeCycle
+    private val schedulerProvider: SchedulerProvider
 ) {
 
     private val loadTaskProcessor =
@@ -23,7 +23,6 @@ class StoriesActionProcessorHolder(
                         request.story,
                         request.forceUpdate
                     )
-                        .compose(rxLifeCycle.async())
                         .map { stories ->
                             LoadStoriesResult.Success(
                                 StoryResponse(
@@ -34,6 +33,7 @@ class StoriesActionProcessorHolder(
                         }
                         .cast(LoadStoriesResult::class.java)
                         .onErrorReturn { throwable -> LoadStoriesResult.Error(throwable) }
+                        .subscribeOn(schedulerProvider.io())
                 }.startWith(LoadStoriesResult.Loading)
         }
 

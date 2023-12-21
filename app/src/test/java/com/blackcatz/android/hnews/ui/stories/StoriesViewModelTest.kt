@@ -2,8 +2,7 @@ package com.blackcatz.android.hnews.ui.stories
 
 import com.blackcatz.android.hnews.data.MockItem
 import com.blackcatz.android.hnews.model.Story
-import com.blackcatz.android.hnews.mvi.rx.RxLifeCycle
-import com.blackcatz.android.hnews.mvi.rx.TestRxLifeCycle
+import com.blackcatz.android.hnews.mvp.rx.MockSchedulerProvider
 import com.blackcatz.android.hnews.repo.ItemRepo
 import com.blackcatz.android.hnews.ui.stories.domain.DEFAULT_ITEM_SIZE
 import com.blackcatz.android.hnews.ui.stories.domain.StoryRequest
@@ -16,17 +15,16 @@ import org.junit.Test
 
 class StoriesViewModelTest {
 
-    private lateinit var rxLifeCycle: RxLifeCycle
     private lateinit var itemRepo: ItemRepo
     private lateinit var storiesActionProcessorHolder: StoriesActionProcessorHolder
     private lateinit var viewModel: StoriesViewModel
+    private val schedulerProvider = MockSchedulerProvider()
 
     @Before
     fun setUp() {
-        rxLifeCycle = TestRxLifeCycle()
         itemRepo = mock()
-        storiesActionProcessorHolder = StoriesActionProcessorHolder(itemRepo, rxLifeCycle)
-        viewModel = StoriesViewModel(storiesActionProcessorHolder, rxLifeCycle)
+        storiesActionProcessorHolder = StoriesActionProcessorHolder(itemRepo, schedulerProvider)
+        viewModel = StoriesViewModel(storiesActionProcessorHolder)
     }
 
     @Test

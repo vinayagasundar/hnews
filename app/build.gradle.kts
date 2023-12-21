@@ -4,7 +4,7 @@ plugins {
     id("kotlin-kapt")
     id(libs.plugins.androidx.room.get().pluginId)
     id(libs.plugins.ksp.get().pluginId)
-//    id ("dagger.hilt.android.plugin")
+    id(libs.plugins.hilt.android.get().pluginId)
 }
 
 room {
@@ -77,7 +77,7 @@ dependencies {
     implementation(libs.bundles.room)
     implementation(libs.bundles.retrofit)
     implementation(libs.bundles.okhttp)
-    implementation(libs.dagger.core)
+    implementation(libs.dagger.hilt)
     implementation(libs.coroutine.android)
     implementation(libs.timberLog)
     implementation(libs.rxjava.core)
@@ -85,7 +85,8 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.lifecycle.extension)
     implementation("com.android.support:customtabs:28.0.0")
-    kapt(libs.dagger.core.compiler)
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    kapt(libs.dagger.hilt.compiler)
     ksp(libs.room.compiler)
     debugImplementation(libs.compose.debug.tool)
     testImplementation(libs.junit)
