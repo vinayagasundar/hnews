@@ -2,8 +2,7 @@ package com.blackcatz.android.hnews.ui.stories
 
 import com.blackcatz.android.hnews.data.MockItem
 import com.blackcatz.android.hnews.model.Story
-import com.blackcatz.android.hnews.mvi.rx.RxLifeCycle
-import com.blackcatz.android.hnews.mvi.rx.TestRxLifeCycle
+import com.blackcatz.android.hnews.mvp.rx.MockSchedulerProvider
 import com.blackcatz.android.hnews.repo.ItemRepo
 import com.blackcatz.android.hnews.ui.stories.domain.DEFAULT_ITEM_SIZE
 import com.blackcatz.android.hnews.ui.stories.domain.StoryRequest
@@ -17,8 +16,8 @@ import org.junit.Test
 class StoriesActionProcessorHolderTest {
 
     private val itemRepo: ItemRepo = mock()
-    private val rxLifeCycle: RxLifeCycle = TestRxLifeCycle()
-    private val actionProcessorHolder = StoriesActionProcessorHolder(itemRepo, rxLifeCycle)
+    private val schedulerProvider = MockSchedulerProvider()
+    private val actionProcessorHolder = StoriesActionProcessorHolder(itemRepo, schedulerProvider)
 
     private val allItems = MockItem.allItems
 

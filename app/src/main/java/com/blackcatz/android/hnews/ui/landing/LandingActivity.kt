@@ -5,38 +5,30 @@ import android.view.Menu
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.blackcatz.android.hnews.R
-import com.blackcatz.android.hnews.di.AppComponentProvider
-import com.blackcatz.android.hnews.ui.landing.di.DaggerLandingComponent
+import com.blackcatz.android.hnews.ui.landing.domain.ALL_STORIES
 import com.blackcatz.android.hnews.ui.landing.domain.ASK_STORIES
 import com.blackcatz.android.hnews.ui.landing.domain.JOB_STORIES
 import com.blackcatz.android.hnews.ui.landing.domain.SHOW_STORIES
 import com.blackcatz.android.hnews.ui.landing.domain.TOP_STORIES
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LandingActivity : AppCompatActivity() {
-
-    @Inject
-    lateinit var factory: ViewModelProvider.Factory
-    private lateinit var viewModel: LandingViewModel
 
     private lateinit var pbLoading: ProgressBar
     private lateinit var vpStoryHolder: ViewPager
     private lateinit var bottomNavigationView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        injectDependencies()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_landing)
 
         pbLoading = findViewById(R.id.loading_bar)
         vpStoryHolder = findViewById(R.id.stories_holder)
         bottomNavigationView = findViewById(R.id.item_bottom_nav)
-        viewModel = ViewModelProviders.of(this, factory)[LandingViewModel::class.java]
 
         getAllTabs()
     }
@@ -44,7 +36,7 @@ class LandingActivity : AppCompatActivity() {
     private fun getAllTabs() {
         pbLoading.visibility = View.VISIBLE
 
-        val list = viewModel.getNavViews()
+        val list = ALL_STORIES.asList()
 
         list.forEach {
             bottomNavigationView.menu.add(Menu.NONE, it.id, Menu.NONE, it.title)
@@ -69,12 +61,5 @@ class LandingActivity : AppCompatActivity() {
         }
 
         bottomNavigationView.visibility = View.VISIBLE
-    }
-
-    private fun injectDependencies() {
-        val dependencies = (application as AppComponentProvider).provideAppComponent()
-        DaggerLandingComponent.factory()
-            .create(dependencies)
-            .inject(this)
     }
 }

@@ -7,28 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.blackcatz.android.hnews.R
-import com.blackcatz.android.hnews.di.AppComponentProvider
 import com.blackcatz.android.hnews.model.Item
 import com.blackcatz.android.hnews.model.Story
 import com.blackcatz.android.hnews.mvi.android.MviAppFragment
-import com.blackcatz.android.hnews.ui.stories.di.DaggerStoriesComponent
 import com.blackcatz.android.hnews.ui.stories.domain.StoryRequest
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesViewModel>(),
     ItemAdapter.Callback {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    private val viewModel by viewModels<StoriesViewModel>()
 
     private lateinit var refreshLayout: SwipeRefreshLayout
     private lateinit var storiesRecyclerView: RecyclerView
@@ -57,7 +54,7 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
     }
 
     override fun createViewModel(): StoriesViewModel {
-        return ViewModelProviders.of(this, viewModelFactory)[StoriesViewModel::class.java]
+        return viewModel
     }
 
     override fun onCreateView(
@@ -92,11 +89,6 @@ class StoriesFragment : MviAppFragment<StoriesIntent, StoriesViewState, StoriesV
     }
 
     override fun injectDependencies() {
-        val dependencies = (context?.applicationContext as AppComponentProvider)
-            .provideAppComponent()
-        DaggerStoriesComponent.factory()
-            .create(dependencies, this)
-            .inject(this)
     }
 
     override fun intents(): Observable<StoriesIntent> = Observable.merge(
