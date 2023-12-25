@@ -28,9 +28,9 @@ class HomeViewModel @Inject constructor(
 
     fun observeHomeState() {
         viewModelScope.launch {
-            val topStoryIds = hackerAPI.getTopStoriesV2().slice(0..10)
+            val topStoryIds = hackerAPI.getTopStories().slice(0..10)
             val topStories = topStoryIds.map {
-                val item = hackerAPI.getItemV2(it.toString())
+                val item = hackerAPI.getItem(it.toString())
                 Story(
                     item.id.toLong(),
                     item.title.orEmpty(),
