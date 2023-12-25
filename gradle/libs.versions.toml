@@ -1,13 +1,11 @@
 [versions]
 androidGradlePlugin = "8.2.0"
 kotlin = "1.9.20"
-accompainst = "0.23.1"
 activity = "1.8.2"
 compose = "1.5.4"
 core = "1.12.0"
 coroutine = "1.7.1"
 dagger = "2.49"
-datastore = "1.0.0"
 lifecycle = "2.6.2"
 navigation = "2.7.6"
 room = "2.6.1"
@@ -15,26 +13,16 @@ okhttp = "4.9.0"
 retrofit = "2.9.0"
 ksp = "1.9.20-1.0.13"
 
+composeBOM = "2023.10.01"
+
 [libraries]
 appcompat = "androidx.appcompat:appcompat:1.6.1"
-accompainst-animated-navigation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompainst" }
-accompainst-placeholder = { module = "com.google.accompanist:accompanist-placeholder", version.ref = "accompainst" }
-accompainst-systemcontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompainst" }
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
-compose-debug-tool = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
-compose-material-material3 = "androidx.compose.material3:material3:1.0.0-beta03"
-compose-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 core = { module = "androidx.core:core-ktx", version.ref = "core" }
 coroutine-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutine" }
-dagger-core = { module = "com.google.dagger:dagger", version.ref = "dagger" }
-dagger-core-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 dagger-hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
-dagger-hilt-compose-navigation = "androidx.hilt:hilt-navigation-compose:1.1.0"
-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
-kotlinx-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.4.0"
-lifecycle-extension = { module = "androidx.lifecycle:lifecycle-extensions", version = "2.2.0"}
+lifecycle-extension = { module = "androidx.lifecycle:lifecycle-extensions", version = "2.2.0" }
 lifecycle-compose-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 lifecycle-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
@@ -47,12 +35,26 @@ okhttp-logger = { module = "com.squareup.okhttp3:logging-interceptor", version.r
 retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-convertor-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 retrofit-adapter-rxjava = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofit" }
-rxjava-core = {module = "io.reactivex.rxjava2:rxjava", version="2.2.21"}
+rxjava-core = { module = "io.reactivex.rxjava2:rxjava", version = "2.2.21" }
 rxjava-android = { module = "io.reactivex.rxjava2:rxandroid", version = "2.1.1" }
 
 material = "com.google.android.material:material:1.11.0"
 junit = "junit:junit:4.13.2"
 mockito-kotlin = "com.nhaarman:mockito-kotlin:1.6.0"
+
+
+# Compose UI Libs
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBOM" }
+compose-material = { module = "androidx.compose.material:material" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-material-icon = { module = "androidx.compose.material:material-icons-core" }
+compose-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+
+compose-debug-tooling = { module = "androidx.compose.ui:ui-tooling" }
+ui = { group = "androidx.compose.ui", name = "ui" }
+ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -64,16 +66,6 @@ androidx-room = { id = "androidx.room", version.ref = "room" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [bundles]
-accompainst = [
-    "accompainst-animated-navigation",
-    "accompainst-placeholder",
-    "accompainst-systemcontroller",
-]
-compose-material3 = [
-    "compose-material-material3",
-    "compose-preview",
-    "compose-ui",
-]
 room = [
     "room-core",
     "room-ktx",

@@ -63,11 +63,20 @@ android {
     packaging {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
 }
 
 dependencies {
+    // Compose
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.preview)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.material.icon)
+
+    debugImplementation(libs.compose.debug.tooling)
+
     implementation(libs.core)
     implementation(libs.lifecycle.ktx)
     implementation(libs.lifecycle.compose.viewmodel)
@@ -86,9 +95,9 @@ dependencies {
     implementation(libs.lifecycle.extension)
     implementation("com.android.support:customtabs:28.0.0")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
+    debugImplementation(libs.ui.test.manifest)
     kapt(libs.dagger.hilt.compiler)
     ksp(libs.room.compiler)
-    debugImplementation(libs.compose.debug.tool)
     testImplementation(libs.junit)
     testImplementation(libs.mockito.kotlin)
 }

@@ -1,12 +1,12 @@
 package com.blackcatz.android.hnews.data
 
-import com.blackcatz.android.hnews.model.Item
+import com.blackcatz.android.hnews.network.data.ItemResponse
 
 class MockItem {
 
     companion object {
 
-        val itemOne = Item(
+        val itemResponseOne = ItemResponse(
             id = 100,
             deleted = false,
             type = "type",
@@ -24,7 +24,7 @@ class MockItem {
             descendants = 1
         )
 
-        val itemTwo = Item(
+        val itemResponseTwo = ItemResponse(
             id = 100,
             deleted = false,
             type = "type",
@@ -42,6 +42,6 @@ class MockItem {
             descendants = 1
         )
 
-        val allItems = listOf<Item>(itemOne, itemTwo)
+        val allItemResponses = listOf<ItemResponse>(itemResponseOne, itemResponseTwo)
     }
 }

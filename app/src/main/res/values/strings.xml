@@ -3,4 +3,5 @@
 
     <string name="story_label_by">by %s</string>
     <string name="story_label_comments">%s comments</string>
+    <string name="title_activity_home">HomeActivity</string>
 </resources>

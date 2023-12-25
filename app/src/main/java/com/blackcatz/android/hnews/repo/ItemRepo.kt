@@ -1,7 +1,7 @@
 package com.blackcatz.android.hnews.repo
 
 import androidx.collection.ArrayMap
-import com.blackcatz.android.hnews.model.Item
+import com.blackcatz.android.hnews.network.data.ItemResponse
 import com.blackcatz.android.hnews.model.Story
 import com.blackcatz.android.hnews.network.HackerAPI
 import io.reactivex.Single
@@ -12,7 +12,7 @@ interface ItemRepo {
         size: Int,
         story: Story,
         forceUpdate: Boolean = true
-    ): Single<List<Item>>
+    ): Single<List<ItemResponse>>
 }
 
 
@@ -27,7 +27,7 @@ internal class ItemRepoImpl(
         size: Int,
         story: Story,
         forceUpdate: Boolean
-    ): Single<List<Item>> {
+    ): Single<List<ItemResponse>> {
         val skipCount = page * size
         return getStoriesIdList(story, forceUpdate)
             .flatMap {
@@ -65,7 +65,7 @@ internal class ItemRepoImpl(
         }
     }
 
-    private fun getItem(itemId: Long): Single<Item> {
+    private fun getItem(itemId: Long): Single<ItemResponse> {
         return hackerAPI.getItem("$itemId")
 
     }

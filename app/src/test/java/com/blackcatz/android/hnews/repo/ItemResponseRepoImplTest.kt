@@ -9,7 +9,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
 import org.junit.Test
 
-class ItemRepoImplTest {
+class ItemResponseRepoImplTest {
 
     private val hackerAPI: HackerAPI = mock()
 
@@ -20,21 +20,21 @@ class ItemRepoImplTest {
     @Test
     fun `should return Items for given story, page and size`() {
         whenever(hackerAPI.getAskStories()).thenReturn(Single.just(listOfIds))
-        whenever(hackerAPI.getItem(any())).thenReturn(Single.just(MockItem.itemOne))
+        whenever(hackerAPI.getItem(any())).thenReturn(Single.just(MockItem.itemResponseOne))
 
         itemRepo.getStories(0, 1, Story.ASK)
             .test()
             .assertValue {
-                it[0] == MockItem.itemOne
+                it[0] == MockItem.itemResponseOne
             }
             .dispose()
 
-        whenever(hackerAPI.getItem(any())).thenReturn(Single.just(MockItem.itemTwo))
+        whenever(hackerAPI.getItem(any())).thenReturn(Single.just(MockItem.itemResponseTwo))
 
         itemRepo.getStories(1, 1, Story.ASK)
             .test()
             .assertValue {
-                it[0] == MockItem.itemTwo
+                it[0] == MockItem.itemResponseTwo
             }
             .dispose()
     }
