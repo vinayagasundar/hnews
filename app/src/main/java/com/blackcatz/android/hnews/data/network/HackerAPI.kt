@@ -1,6 +1,6 @@
-package com.blackcatz.android.hnews.network
+package com.blackcatz.android.hnews.data.network
 
-import com.blackcatz.android.hnews.network.data.ItemResponse
+import com.blackcatz.android.hnews.data.network.response.ItemResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 

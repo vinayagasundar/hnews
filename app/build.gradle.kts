@@ -80,6 +80,7 @@ dependencies {
     implementation(libs.core)
     implementation(libs.lifecycle.ktx)
     implementation(libs.lifecycle.compose.viewmodel)
+    implementation(libs.lifecycle.runtime.compose)
     implementation(libs.activity.compose)
     implementation(libs.navigation.compose)
     implementation(libs.material)

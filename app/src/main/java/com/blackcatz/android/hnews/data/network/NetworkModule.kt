@@ -1,4 +1,4 @@
-package com.blackcatz.android.hnews.network
+package com.blackcatz.android.hnews.data.network
 
 import com.blackcatz.android.hnews.BuildConfig
 import com.google.gson.Gson
