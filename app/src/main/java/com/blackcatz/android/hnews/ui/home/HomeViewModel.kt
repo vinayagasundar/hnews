@@ -7,7 +7,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -35,6 +34,7 @@ class HomeViewModel @Inject constructor(
                 Story(
                     item.id.toLong(),
                     item.title.orEmpty(),
+                    item.by,
                     item.score?.toInt() ?: 0,
                     item.kids.orEmpty().size,
                     item.url.orEmpty()

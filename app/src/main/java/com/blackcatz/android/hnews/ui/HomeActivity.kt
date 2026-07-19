@@ -14,10 +14,7 @@ class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            HnewsTheme(
-                darkTheme = false,
-                dynamicColor = false
-            ) {
+            HnewsTheme {
                 HomeScreen(
                     modifier = Modifier.fillMaxSize(),
                 )

@@ -7,6 +7,7 @@ data class HomeState(
 data class Story(
     val id: Long,
     val title: String,
+    val author: String,
     val noOfVotes: Int,
     val totalComment: Int,
     val url: String
