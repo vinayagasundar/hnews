@@ -1,27 +1,30 @@
 [versions]
-androidGradlePlugin = "8.2.2"
-kotlin = "1.9.20"
-activity = "1.8.2"
-compose = "1.5.4"
-core = "1.12.0"
-coroutine = "1.8.0"
-dagger = "2.49"
-lifecycle = "2.7.0"
+androidGradlePlugin = "9.3.0"
+customtabs = "28.0.0"
+fragmentKtx = "1.8.9"
+kotlin = "2.4.10"
+activity = "1.13.0"
+core = "1.19.0"
+coroutine = "1.11.0"
+dagger = "2.60.1"
+lifecycle = "2.11.0"
 navigation = "2.7.7"
-room = "2.6.1"
-okhttp = "4.9.0"
-retrofit = "2.9.0"
-ksp = "1.9.20-1.0.13"
+room = "2.8.4"
+okhttp = "5.4.0"
+retrofit = "3.0.0"
+ksp = "2.3.10"
 
-composeBOM = "2023.10.01"
+composeBOM = "2026.06.01"
 
 [libraries]
-appcompat = "androidx.appcompat:appcompat:1.6.1"
+appcompat = "androidx.appcompat:appcompat:1.7.1"
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 core = { module = "androidx.core:core-ktx", version.ref = "core" }
 coroutine-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutine" }
+customtabs = { module = "com.android.support:customtabs", version.ref = "customtabs" }
 dagger-hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
+fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 lifecycle-extension = { module = "androidx.lifecycle:lifecycle-extensions", version = "2.2.0" }
 lifecycle-compose-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
@@ -36,32 +39,24 @@ okhttp-logger = { module = "com.squareup.okhttp3:logging-interceptor", version.r
 retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-convertor-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 retrofit-adapter-rxjava = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofit" }
-rxjava-core = { module = "io.reactivex.rxjava2:rxjava", version = "2.2.21" }
-rxjava-android = { module = "io.reactivex.rxjava2:rxandroid", version = "2.1.1" }
 
-material = "com.google.android.material:material:1.11.0"
 junit = "junit:junit:4.13.2"
 mockito-kotlin = "com.nhaarman:mockito-kotlin:1.6.0"
 
 
 # Compose UI Libs
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBOM" }
-compose-material = { module = "androidx.compose.material:material" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 compose-material-icon = { module = "androidx.compose.material:material-icons-core" }
 compose-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 
 compose-debug-tooling = { module = "androidx.compose.ui:ui-tooling" }
-ui = { group = "androidx.compose.ui", name = "ui" }
-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-benmans-versions = "com.github.ben-manes.versions:0.41.0"
-version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.4"
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 androidx-room = { id = "androidx.room", version.ref = "room" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
