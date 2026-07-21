@@ -10,5 +10,5 @@ data class Story(
     val author: String,
     val noOfVotes: Int,
     val totalComment: Int,
-    val url: String
+    val domain: String,
 )

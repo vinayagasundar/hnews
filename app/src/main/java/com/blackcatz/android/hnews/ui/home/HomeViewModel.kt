@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.net.URL
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,15 +30,16 @@ class HomeViewModel @Inject constructor(
     fun observeHomeState() {
         viewModelScope.launch {
             val topStoryIds = hackerAPI.getTopStories().slice(0..10)
-            val topStories = topStoryIds.map {
-                val item = hackerAPI.getItem(it.toString())
+            val topStories = topStoryIds.map { storyId ->
+                val item = hackerAPI.getItem(storyId.toString())
+                val domain = item.url?.let { url -> URL(url).host }.orEmpty()
                 Story(
-                    item.id.toLong(),
-                    item.title.orEmpty(),
-                    item.by,
-                    item.score?.toInt() ?: 0,
-                    item.kids.orEmpty().size,
-                    item.url.orEmpty()
+                    id = item.id.toLong(),
+                    title = item.title.orEmpty(),
+                    author = item.by,
+                    noOfVotes = item.score ?: 0,
+                    totalComment = item.kids.orEmpty().size,
+                    domain = domain
                 )
             }
             _state.update { it.copy(stories = topStories) }
