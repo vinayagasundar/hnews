@@ -14,5 +14,5 @@ interface HackerAPI {
     suspend fun getTopStories(): List<Long>
 
     @GET("item/{itemId}.json")
-    suspend fun getItem(@Path("itemId") itemId: String): ItemResponse
+    suspend fun getItem(@Path("itemId") itemId: Long): ItemResponse
 }

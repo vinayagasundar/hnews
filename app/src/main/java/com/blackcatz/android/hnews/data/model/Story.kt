@@ -1,8 +1,4 @@
-package com.blackcatz.android.hnews.ui.home
-
-data class HomeState(
-    val stories: List<Story>
-)
+package com.blackcatz.android.hnews.data.model
 
 data class Story(
     val id: Long,

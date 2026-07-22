@@ -2,21 +2,22 @@ package com.blackcatz.android.hnews.ui.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -25,8 +26,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.blackcatz.android.hnews.R
 import com.blackcatz.android.hnews.ui.theme.HnewsTheme
 import com.blackcatz.android.hnews.ui.theme.spacing
@@ -37,11 +40,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(),
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
-
-    LaunchedEffect(key1 = Unit, block = {
-        viewModel.observeHomeState()
-    })
+    val lazyStories = viewModel.storiesPager.collectAsLazyPagingItems()
 
     Scaffold(
         modifier = modifier,
@@ -56,13 +55,46 @@ fun HomeScreen(
         }
     ) { contentPadding ->
         LazyColumn(contentPadding = contentPadding) {
-            items(state.stories) { story ->
+            items(
+                count = lazyStories.itemCount,
+                key = lazyStories.itemKey { it.id },
+            ) { index ->
+                val story = lazyStories[index] ?: return@items
                 StoryListItem(
                     title = story.title,
                     author = story.author,
                     score = story.noOfVotes.toString(),
                     domain = story.domain,
+                    position = story.totalComment,
                 )
+            }
+
+            when (val append = lazyStories.loadState.append) {
+                is LoadState.Loading -> item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(MaterialTheme.spacing.medium),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                is LoadState.Error -> item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(MaterialTheme.spacing.medium),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        TextButton(onClick = { lazyStories.retry() }) {
+                            Text(text = "Retry (${append.error.localizedMessage})")
+                        }
+                    }
+                }
+
+                is LoadState.NotLoading -> Unit
             }
         }
     }
@@ -74,6 +106,7 @@ private fun StoryListItem(
     author: String,
     score: String,
     domain: String,
+    position: Int = 0,
 ) {
     Row(
         modifier = Modifier
@@ -134,6 +167,17 @@ private fun StoryListItem(
 
                 Text(
                     text = domain,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+
+                Text(
+                    text = "•",
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+
+                Text(
+                    text = position.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                 )

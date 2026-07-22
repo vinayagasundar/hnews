@@ -71,5 +71,8 @@ dependencies {
     implementation(libs.dagger.hilt)
     implementation(libs.coroutine.android)
     implementation(libs.timberLog)
+    implementation(libs.bundles.room)
+    implementation(libs.bundles.paging)
     ksp(libs.dagger.hilt.compiler)
+    ksp(libs.room.compiler)
 }
