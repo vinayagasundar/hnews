@@ -10,6 +10,7 @@ import com.blackcatz.android.hnews.data.local.RemoteKeysEntity
 import com.blackcatz.android.hnews.data.local.StoryEntity
 import com.blackcatz.android.hnews.data.mapper.toStoryEntity
 import com.blackcatz.android.hnews.data.network.HackerAPI
+import com.blackcatz.android.hnews.utils.logD
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -59,12 +60,12 @@ class StoryRemoteMediator(
             val pageIds = ids.subList(pageStart, pageEnd)
 
             val fetched = coroutineScope {
-                pageIds.map { id ->
-                    async { runCatching { hackerAPI.getItem(id) }.getOrNull() }
+                pageIds.mapIndexed { index, id ->
+                    async { index to runCatching { hackerAPI.getItem(id) }.getOrNull() }
                 }.awaitAll()
-            }.filterNotNull()
+            }
 
-            if (fetched.isEmpty() && pageIds.isNotEmpty()) {
+            if (fetched.all { it.second == null } && pageIds.isNotEmpty()) {
                 return MediatorResult.Error(IOException("Failed to load story details"))
             }
 
@@ -76,8 +77,8 @@ class StoryRemoteMediator(
                     database.remoteKeysDao().clearRemoteKeys()
                     database.storyDao().clearAll()
                 }
-                val entities = fetched.mapIndexed { index, item ->
-                    item.toStoryEntity(position = pageStart + index)
+                val entities = fetched.mapNotNull { (index, item) ->
+                    item?.toStoryEntity(position = pageStart + index)
                 }
                 val keys = entities.map { RemoteKeysEntity(it.id, prevKey = null, nextKey = nextKey) }
                 database.remoteKeysDao().insertAll(keys)

@@ -27,7 +27,7 @@ class StoryRepository @Inject constructor(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
                 initialLoadSize = PAGE_SIZE,
-                enablePlaceholders = false,
+                enablePlaceholders = true,
             ),
             remoteMediator = StoryRemoteMediator(hackerAPI, database),
             pagingSourceFactory = { storyDao.pagingSource() },

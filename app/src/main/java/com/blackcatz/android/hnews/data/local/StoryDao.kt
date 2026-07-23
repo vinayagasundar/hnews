@@ -9,7 +9,7 @@ import androidx.room.Query
 @Dao
 interface StoryDao {
 
-    @Query("SELECT * FROM stories ORDER BY position ASC")
+    @Query("SELECT * FROM stories ORDER BY position ASC, id ASC")
     fun pagingSource(): PagingSource<Int, StoryEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

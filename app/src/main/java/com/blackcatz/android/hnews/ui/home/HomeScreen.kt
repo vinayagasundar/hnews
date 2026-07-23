@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -33,14 +34,16 @@ import androidx.paging.compose.itemKey
 import com.blackcatz.android.hnews.R
 import com.blackcatz.android.hnews.ui.theme.HnewsTheme
 import com.blackcatz.android.hnews.ui.theme.spacing
+import kotlinx.coroutines.FlowPreview
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, FlowPreview::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(),
 ) {
     val lazyStories = viewModel.storiesPager.collectAsLazyPagingItems()
+    val lazyListState = rememberLazyListState()
 
     Scaffold(
         modifier = modifier,
@@ -54,10 +57,15 @@ fun HomeScreen(
             )
         }
     ) { contentPadding ->
-        LazyColumn(contentPadding = contentPadding) {
+        LazyColumn(
+            contentPadding = contentPadding,
+            state = lazyListState,
+        ) {
             items(
                 count = lazyStories.itemCount,
-                key = lazyStories.itemKey { it.id },
+                key = lazyStories.itemKey {
+                    it.id.toString()
+                },
             ) { index ->
                 val story = lazyStories[index] ?: return@items
                 StoryListItem(
