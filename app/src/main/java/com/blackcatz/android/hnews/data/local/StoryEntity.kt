@@ -12,5 +12,5 @@ data class StoryEntity(
     val author: String,
     val score: Int,
     val totalComment: Int,
-    val domain: String,
+    val url: String,
 )

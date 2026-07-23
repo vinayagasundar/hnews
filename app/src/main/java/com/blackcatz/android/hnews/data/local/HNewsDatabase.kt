@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase
 @Database(
     entities = [StoryEntity::class, RemoteKeysEntity::class],
     version = 1,
-    exportSchema = false,
+    exportSchema = true,
 )
 abstract class HNewsDatabase : RoomDatabase() {
     abstract fun storyDao(): StoryDao

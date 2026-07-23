@@ -73,7 +73,6 @@ fun HomeScreen(
                     author = story.author,
                     score = story.noOfVotes.toString(),
                     domain = story.domain,
-                    position = story.totalComment,
                 )
             }
 
@@ -114,7 +113,6 @@ private fun StoryListItem(
     author: String,
     score: String,
     domain: String,
-    position: Int = 0,
 ) {
     Row(
         modifier = Modifier
@@ -175,17 +173,6 @@ private fun StoryListItem(
 
                 Text(
                     text = domain,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-
-                Text(
-                    text = "•",
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-
-                Text(
-                    text = position.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                 )
