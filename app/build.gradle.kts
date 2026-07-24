@@ -35,9 +35,9 @@ android {
         }
     }
 
-    sourceSets {
-        getByName("test") {
-            java.srcDirs(listOf(file("src/commonTest/java")))
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
         }
     }
 
@@ -79,4 +79,6 @@ dependencies {
     implementation(libs.bundles.paging)
     ksp(libs.dagger.hilt.compiler)
     ksp(libs.room.compiler)
+
+    testImplementation(libs.bundles.unit.test)
 }

@@ -14,6 +14,12 @@ paging = "3.4.2"
 
 composeBOM = "2026.06.01"
 
+junit4 = "4.13.2"
+mockk = "1.14.3"
+robolectric = "4.15.1"
+androidxTestCore = "1.6.1"
+androidxTestJunit = "1.3.0"
+
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 core = { module = "androidx.core:core-ktx", version.ref = "core" }
@@ -45,6 +51,15 @@ compose-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 
 compose-debug-tooling = { module = "androidx.compose.ui:ui-tooling" }
 
+# Testing
+junit4 = { module = "junit:junit", version.ref = "junit4" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutine" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+androidx-test-core = { module = "androidx.test:core", version.ref = "androidxTestCore" }
+androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidxTestJunit" }
+paging-testing = { module = "androidx.paging:paging-testing", version.ref = "paging" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -69,4 +84,13 @@ room = [
 paging = [
     "paging-runtime",
     "paging-compose"
+]
+unit-test = [
+    "junit4",
+    "mockk",
+    "kotlinx-coroutines-test",
+    "robolectric",
+    "androidx-test-core",
+    "androidx-test-junit",
+    "paging-testing"
 ]
